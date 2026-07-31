@@ -1,5 +1,0 @@
-/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/CMakeFiles/PasswordManager.dir
-/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/CMakeFiles/edit_cache.dir
-/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/CMakeFiles/rebuild_cache.dir
-/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/CMakeFiles/PasswordManager_autogen_timestamp_deps.dir
-/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/CMakeFiles/PasswordManager_autogen.dir
