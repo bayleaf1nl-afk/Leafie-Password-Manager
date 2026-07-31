@@ -1,0 +1,44 @@
+[
+{
+  "directory": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/include -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -fsanitize=address,undefined -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/mocs_compilation.cpp",
+  "file": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/mocs_compilation.cpp",
+  "output": "CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o"
+},
+{
+  "directory": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/include -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -fsanitize=address,undefined -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/PasswordManager.dir/src/main.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp",
+  "file": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp",
+  "output": "CMakeFiles/PasswordManager.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/include -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -fsanitize=address,undefined -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp",
+  "file": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp",
+  "output": "CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o"
+},
+{
+  "directory": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/include -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -fsanitize=address,undefined -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_standard.cpp",
+  "file": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_standard.cpp",
+  "output": "CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o"
+},
+{
+  "directory": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/include -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -fsanitize=address,undefined -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_tiling.cpp",
+  "file": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_tiling.cpp",
+  "output": "CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o"
+},
+{
+  "directory": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/include -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -fsanitize=address,undefined -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowUtils.cpp",
+  "file": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowUtils.cpp",
+  "output": "CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o"
+},
+{
+  "directory": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -I/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/include -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -fsanitize=address,undefined -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/qrc_resources.cpp",
+  "file": "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/qrc_resources.cpp",
+  "output": "CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o"
+}
+]
