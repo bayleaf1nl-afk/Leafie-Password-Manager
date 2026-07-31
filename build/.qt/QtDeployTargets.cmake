@@ -1,2 +1,0 @@
-set(__QT_DEPLOY_TARGET_PasswordManager_FILE /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager)
-set(__QT_DEPLOY_TARGET_PasswordManager_TYPE EXECUTABLE)
