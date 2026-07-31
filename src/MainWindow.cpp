@@ -4,6 +4,7 @@
 #include "PasswordManager.h"
 #include "GenericDialog.h"
 #include "platform/WindowManager.h"
+#include "PasswordEntry.h"
 //---------------------------//
 #include <QApplication>
 #include <QFile>
@@ -61,9 +62,20 @@ MainWindow::MainWindow() {
 
 
 void MainWindow::NewPassword(){
-    GenericDialog dlg("New Password", {{"Enter new password", QLineEdit::Normal}}, false, this);
+    QVector<DialogField> fields = {
+        {"Site: ", QLineEdit::Normal},
+        {"Username: ", QLineEdit::Normal},
+        {"Password: ", QLineEdit::Password},
+    };
+
+    GenericDialog dlg("New Password", fields, false, this);
     if (dlg.exec() == QDialog::Accepted){
-        passwordList->addItem(dlg.inputText(0));
+        PasswordEntry entry;
+        entry.site = dlg.inputText(0);
+        entry.username = dlg.inputText(1);
+        entry.password = dlg.inputText(2);
+
+        passwordList->addItem(entry.site);
     }
 }
 void MainWindow::RemovePassword(){
