@@ -565,6 +565,18 @@
 	"HEADERS" : 
 	[
 		[
+			"/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.h",
+			"MU",
+			"UVLADIE3JM/moc_GenericDialog.cpp",
+			null
+		],
+		[
+			"/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.h",
+			"MU",
+			"UVLADIE3JM/moc_LoginGate.cpp",
+			null
+		],
+		[
 			"/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.h",
 			"MU",
 			"UVLADIE3JM/moc_MainWindow.cpp",
@@ -650,6 +662,16 @@
 	"SETTINGS_FILE" : "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles/PasswordManager_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[
+			"/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp",
+			"MU",
+			null
+		],
 		[
 			"/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp",
 			"MU",

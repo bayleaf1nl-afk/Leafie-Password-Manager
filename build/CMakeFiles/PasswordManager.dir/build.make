@@ -93,24 +93,38 @@ CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.s: c
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/mocs_compilation.cpp -o CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.s
 
-CMakeFiles/PasswordManager.dir/src/main.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
-CMakeFiles/PasswordManager.dir/src/main.cpp.o: /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp
-CMakeFiles/PasswordManager.dir/src/main.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/PasswordManager.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/src/main.cpp.o -MF CMakeFiles/PasswordManager.dir/src/main.cpp.o.d -o CMakeFiles/PasswordManager.dir/src/main.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp
+CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
+CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o: /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp
+CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o -MF CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o.d -o CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp
 
-CMakeFiles/PasswordManager.dir/src/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/PasswordManager.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp > CMakeFiles/PasswordManager.dir/src/main.cpp.i
+CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp > CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.i
 
-CMakeFiles/PasswordManager.dir/src/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PasswordManager.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp -o CMakeFiles/PasswordManager.dir/src/main.cpp.s
+CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp -o CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.s
+
+CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
+CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o: /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp
+CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o -MF CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o.d -o CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp
+
+CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp > CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.i
+
+CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp -o CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.s
 
 CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
 CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o: /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp
 CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o -MF CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o.d -o CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp
 
 CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.i: cmake_force
@@ -121,10 +135,24 @@ CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp -o CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.s
 
+CMakeFiles/PasswordManager.dir/src/main.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
+CMakeFiles/PasswordManager.dir/src/main.cpp.o: /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp
+CMakeFiles/PasswordManager.dir/src/main.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/PasswordManager.dir/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/src/main.cpp.o -MF CMakeFiles/PasswordManager.dir/src/main.cpp.o.d -o CMakeFiles/PasswordManager.dir/src/main.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp
+
+CMakeFiles/PasswordManager.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/PasswordManager.dir/src/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp > CMakeFiles/PasswordManager.dir/src/main.cpp.i
+
+CMakeFiles/PasswordManager.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PasswordManager.dir/src/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp -o CMakeFiles/PasswordManager.dir/src/main.cpp.s
+
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o: /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_standard.cpp
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o -MF CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o.d -o CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_standard.cpp
 
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.i: cmake_force
@@ -138,7 +166,7 @@ CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.s: cmake_
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o: /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_tiling.cpp
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o -MF CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o.d -o CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_tiling.cpp
 
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.i: cmake_force
@@ -152,7 +180,7 @@ CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.s: cmake_fo
 CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
 CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o: /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowUtils.cpp
 CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o -MF CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o.d -o CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowUtils.cpp
 
 CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.i: cmake_force
@@ -166,7 +194,7 @@ CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.s: cmake_force
 CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o: CMakeFiles/PasswordManager.dir/flags.make
 CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o: qrc_resources.cpp
 CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o: CMakeFiles/PasswordManager.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o -MF CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o.d -o CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o -c /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/qrc_resources.cpp
 
 CMakeFiles/PasswordManager.dir/qrc_resources.cpp.i: cmake_force
@@ -180,8 +208,10 @@ CMakeFiles/PasswordManager.dir/qrc_resources.cpp.s: cmake_force
 # Object files for target PasswordManager
 PasswordManager_OBJECTS = \
 "CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o" \
-"CMakeFiles/PasswordManager.dir/src/main.cpp.o" \
+"CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o" \
+"CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o" \
 "CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o" \
+"CMakeFiles/PasswordManager.dir/src/main.cpp.o" \
 "CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o" \
 "CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o" \
 "CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o" \
@@ -191,8 +221,10 @@ PasswordManager_OBJECTS = \
 PasswordManager_EXTERNAL_OBJECTS =
 
 PasswordManager: CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o
-PasswordManager: CMakeFiles/PasswordManager.dir/src/main.cpp.o
+PasswordManager: CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o
+PasswordManager: CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o
 PasswordManager: CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o
+PasswordManager: CMakeFiles/PasswordManager.dir/src/main.cpp.o
 PasswordManager: CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o
 PasswordManager: CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o
 PasswordManager: CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o
@@ -205,7 +237,7 @@ PasswordManager: /usr/lib/libGLX.so
 PasswordManager: /usr/lib/libOpenGL.so
 PasswordManager: /usr/lib/libQt6Core.so.6.11.1
 PasswordManager: CMakeFiles/PasswordManager.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable PasswordManager"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable PasswordManager"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/PasswordManager.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -5,8 +5,10 @@ PasswordManager: \
   /usr/lib/gcc/x86_64-pc-linux-gnu/16/libasan_preinit.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/16/../../../../lib/libasan.so \
   CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o \
-  CMakeFiles/PasswordManager.dir/src/main.cpp.o \
+  CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o \
+  CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o \
   CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o \
+  CMakeFiles/PasswordManager.dir/src/main.cpp.o \
   CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o \
   CMakeFiles/PasswordManager.dir/src/platform/WindowManager_tiling.cpp.o \
   CMakeFiles/PasswordManager.dir/src/platform/WindowUtils.cpp.o \
@@ -104,9 +106,13 @@ PasswordManager: \
 
 CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o:
 
-CMakeFiles/PasswordManager.dir/src/main.cpp.o:
+CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o:
+
+CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o:
 
 CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o:
+
+CMakeFiles/PasswordManager.dir/src/main.cpp.o:
 
 CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o:
 

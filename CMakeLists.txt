@@ -15,11 +15,16 @@ qt_add_resources(RESOURCES
 )
 
 qt_add_executable(PasswordManager
-    src/main.cpp
     src/MainWindow.h
-    src/MainWindow.cpp
     src/PasswordEntry.h
     src/PasswordManager.h
+    src/GenericDialog.h
+    src/LoginGate.h
+    src/LoginGate.cpp
+    src/GenericDialog.cpp
+    src/MainWindow.cpp
+    src/main.cpp
+
     src/platform/WindowManager.h
     src/platform/WindowManager_standard.cpp
     src/platform/WindowManager_tiling.cpp

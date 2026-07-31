@@ -1,10 +1,10 @@
 CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o: \
  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/mocs_compilation.cpp \
  /usr/include/stdc-predef.h \
- /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/UVLADIE3JM/moc_MainWindow.cpp \
- /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/UVLADIE3JM/../../../src/MainWindow.h \
- /usr/include/qt6/QtWidgets/QMainWindow \
- /usr/include/qt6/QtWidgets/qmainwindow.h \
+ /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/UVLADIE3JM/moc_GenericDialog.cpp \
+ /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/UVLADIE3JM/../../../src/GenericDialog.h \
+ /usr/include/qt6/QtWidgets/QDialogButtonBox \
+ /usr/include/qt6/QtWidgets/qdialogbuttonbox.h \
  /usr/include/qt6/QtWidgets/qtwidgetsglobal.h \
  /usr/include/qt6/QtGui/qtguiglobal.h /usr/include/qt6/QtCore/qglobal.h \
  /usr/include/c++/16/type_traits \
@@ -329,14 +329,30 @@ CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtGui/qfontvariableaxis.h \
  /usr/include/qt6/QtWidgets/qsizepolicy.h \
  /usr/include/qt6/QtGui/qcursor.h /usr/include/qt6/QtGui/qbitmap.h \
+ /usr/include/qt6/QtWidgets/QDialog /usr/include/qt6/QtWidgets/qdialog.h \
+ /usr/include/qt6/QtWidgets/QLineEdit \
+ /usr/include/qt6/QtWidgets/qlineedit.h \
+ /usr/include/qt6/QtWidgets/qframe.h /usr/include/qt6/QtGui/qtextcursor.h \
+ /usr/include/qt6/QtGui/qtextdocument.h /usr/include/qt6/QtCore/qurl.h \
+ /usr/include/qt6/QtGui/qtextformat.h /usr/include/qt6/QtGui/qpen.h \
+ /usr/include/qt6/QtGui/qtextoption.h \
+ /usr/include/qt6/QtCore/qcontainerfwd.h \
+ /usr/include/qt6/QtWidgets/qlineedit.h /usr/include/qt6/QtCore/qobject.h \
+ /usr/include/qt6/QtCore/qtmetamacros.h \
+ /usr/include/qt6/QtWidgets/qwidget.h \
+ /usr/include/qt6/QtGui/qwindowdefs.h /usr/include/qt6/QtCore/QVector \
+ /usr/include/qt6/QtCore/qvector.h /usr/include/qt6/QtCore/qtmochelpers.h \
+ /usr/include/qt6/QtCore/qtmocconstants.h \
+ /usr/include/qt6/QtCore/q20algorithm.h \
+ /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/UVLADIE3JM/moc_MainWindow.cpp \
+ /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/UVLADIE3JM/../../../src/MainWindow.h \
+ /usr/include/qt6/QtWidgets/QMainWindow \
+ /usr/include/qt6/QtWidgets/qmainwindow.h \
  /usr/include/qt6/QtWidgets/qtabwidget.h \
  /usr/include/qt6/QtWidgets/QWidget /usr/include/qt6/QtWidgets/qaction.h \
  /usr/include/qt6/QtGui/QAction /usr/include/qt6/QtWidgets/qlabel.h \
- /usr/include/qt6/QtWidgets/qframe.h /usr/include/qt6/QtGui/qpicture.h \
- /usr/include/qt6/QtCore/qiodevice.h \
- /usr/include/qt6/QtGui/qtextdocument.h /usr/include/qt6/QtCore/qurl.h \
+ /usr/include/qt6/QtGui/qpicture.h /usr/include/qt6/QtCore/qiodevice.h \
  /usr/include/qt6/QtWidgets/qmainwindow.h \
- /usr/include/qt6/QtCore/qtmetamacros.h \
  /usr/include/qt6/QtWidgets/QPushButton \
  /usr/include/qt6/QtWidgets/qpushbutton.h \
  /usr/include/qt6/QtWidgets/qabstractbutton.h \
@@ -357,13 +373,4 @@ CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtWidgets/qabstractslider.h \
  /usr/include/qt6/QtWidgets/qstyle.h /usr/include/qt6/QtWidgets/qtabbar.h \
  /usr/include/qt6/QtWidgets/qrubberband.h \
- /usr/include/qt6/QtWidgets/QLineEdit \
- /usr/include/qt6/QtWidgets/qlineedit.h \
- /usr/include/qt6/QtGui/qtextcursor.h \
- /usr/include/qt6/QtGui/qtextformat.h /usr/include/qt6/QtGui/qpen.h \
- /usr/include/qt6/QtGui/qtextoption.h /usr/include/qt6/QtWidgets/QLabel \
- /usr/include/qt6/QtWidgets/qlabel.h /usr/include/qt6/QtWidgets/QDialog \
- /usr/include/qt6/QtWidgets/qdialog.h \
- /usr/include/qt6/QtCore/qtmochelpers.h \
- /usr/include/qt6/QtCore/qtmocconstants.h \
- /usr/include/qt6/QtCore/q20algorithm.h
+ /usr/include/qt6/QtWidgets/QLabel /usr/include/qt6/QtWidgets/qlabel.h

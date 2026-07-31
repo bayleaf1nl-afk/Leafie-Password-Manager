@@ -7,6 +7,10 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
   CMakeFiles/4.4.0/CMakeSystem.cmake \
   PasswordManager_autogen/moc_predefs.h \
   /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/resources.qrc \
+  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp \
+  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.h \
+  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp \
+  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.h \
   /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp \
   /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.h \
   /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/PasswordEntry.h \
@@ -287,6 +291,7 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
   /usr/include/linux/types.h \
   /usr/include/locale.h \
   /usr/include/pthread.h \
+  /usr/include/qt6/QtCore/QVector \
   /usr/include/qt6/QtCore/q17memory.h \
   /usr/include/qt6/QtCore/q20bit.h \
   /usr/include/qt6/QtCore/q20functional.h \
@@ -418,6 +423,7 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
   /usr/include/qt6/QtCore/qutf8stringview.h \
   /usr/include/qt6/QtCore/qvariant.h \
   /usr/include/qt6/QtCore/qvarlengtharray.h \
+  /usr/include/qt6/QtCore/qvector.h \
   /usr/include/qt6/QtCore/qversiontagging.h \
   /usr/include/qt6/QtCore/qxptype_traits.h \
   /usr/include/qt6/QtCore/qyieldcpu.h \
@@ -455,6 +461,7 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
   /usr/include/qt6/QtGui/qvalidator.h \
   /usr/include/qt6/QtGui/qwindowdefs.h \
   /usr/include/qt6/QtWidgets/QDialog \
+  /usr/include/qt6/QtWidgets/QDialogButtonBox \
   /usr/include/qt6/QtWidgets/QLabel \
   /usr/include/qt6/QtWidgets/QLineEdit \
   /usr/include/qt6/QtWidgets/QListWidget \
@@ -469,6 +476,7 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
   /usr/include/qt6/QtWidgets/qabstractspinbox.h \
   /usr/include/qt6/QtWidgets/qaction.h \
   /usr/include/qt6/QtWidgets/qdialog.h \
+  /usr/include/qt6/QtWidgets/qdialogbuttonbox.h \
   /usr/include/qt6/QtWidgets/qframe.h \
   /usr/include/qt6/QtWidgets/qlabel.h \
   /usr/include/qt6/QtWidgets/qlineedit.h \
@@ -992,8 +1000,6 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /usr/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargets.cmake:
 
-/usr/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsDependencies.cmake:
-
 /usr/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsConfigVersion.cmake:
 
 /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake:
@@ -1416,13 +1422,11 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /usr/lib/cmake/Qt6/QtPublicSbomQtEntityHelpers.cmake:
 
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandEglClientBufferPluginConfig.cmake:
+/usr/lib/cmake/Qt6/QtPublicSbomOpsHelpers.cmake:
 
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandAdwaitaDecorationPluginTargets-relwithdebinfo.cmake:
+/usr/lib/cmake/Qt6/QtPublicSbomHelpers.cmake:
 
-/usr/include/c++/16/unordered_map:
-
-/usr/include/c++/16/typeinfo:
+/usr/lib/cmake/Qt6/QtPublicSbomGenerationHelpers.cmake:
 
 /usr/include/c++/16/tr1/special_function_util.h:
 
@@ -1471,6 +1475,10 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 /usr/include/bits/types/struct_timeval.h:
 
 /usr/include/qt6/QtWidgets/qabstractitemview.h:
+
+/usr/lib/cmake/Qt6/QtPublicSbomPurlHelpers.cmake:
+
+/usr/include/c++/16/pstl/glue_numeric_defs.h:
 
 /usr/include/c++/16/bits/stl_algo.h:
 
@@ -1538,10 +1546,6 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /usr/include/c++/16/utility:
 
-/usr/include/c++/16/pstl/glue_numeric_defs.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomPurlHelpers.cmake:
-
 /usr/include/c++/16/limits:
 
 /usr/lib/cmake/Qt6/QtPublicFindPackageHelpers.cmake:
@@ -1569,10 +1573,6 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 /usr/include/qt6/QtGui/qtgui-config.h:
 
 /usr/include/features-time64.h:
-
-/usr/include/c++/16/bits/enable_special_members.h:
-
-/usr/include/qt6/QtCore/q17memory.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QMinimalIntegrationPluginTargets-relwithdebinfo.cmake:
 
@@ -1644,10 +1644,6 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /usr/include/bits/stdint-least.h:
 
-/usr/include/c++/16/type_traits:
-
-/usr/include/c++/16/bits/shared_ptr.h:
-
 /usr/include/c++/16/cwchar:
 
 /usr/include/qt6/QtCore/qcompare_impl.h:
@@ -1673,8 +1669,6 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 /usr/include/c++/16/bits/parse_numbers.h:
 
 /usr/include/c++/16/bits/node_handle.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomHelpers.cmake:
 
 /usr/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake:
 
@@ -1710,19 +1704,39 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /usr/include/qt6/QtWidgets/qmainwindow.h:
 
-/usr/include/c++/16/bits/stl_tree.h:
+/usr/lib/cmake/Qt6Core/Qt6CoreConfigVersion.cmake:
 
-/usr/share/cmake/Modules/CheckLibraryExists.cmake:
-
-/usr/include/c++/16/bits/stl_list.h:
-
-/usr/include/qt6/QtGui/qbitmap.h:
+/usr/lib/cmake/Qt6/QtPublicExternalProjectHelpers.cmake:
 
 /usr/include/c++/16/bits/stdexcept_throwfwd.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginConfig.cmake:
 
 /usr/include/qt6/QtCore/qprocessordetection.h:
+
+/usr/include/qt6/QtGui/qkeysequence.h:
+
+/usr/include/qt6/QtGui/qpixelformat.h:
+
+/usr/include/c++/16/bits/hashtable_policy.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginAdditionalTargetInfo.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomGenerationCycloneDXHelpers.cmake:
+
+/usr/include/c++/16/cerrno:
+
+/usr/include/c++/16/bits/stl_tree.h:
+
+/usr/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsDependencies.cmake:
+
+/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp:
+
+/usr/share/cmake/Modules/CheckLibraryExists.cmake:
+
+/usr/include/c++/16/bits/stl_list.h:
+
+/usr/include/qt6/QtGui/qbitmap.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QTsLibPluginTargets-relwithdebinfo.cmake:
 
@@ -1754,9 +1768,9 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp:
 
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandIntegrationPluginTargets.cmake:
+/usr/include/c++/16/cctype:
 
-/usr/include/bits/pthread_stack_min-dynamic.h:
+/usr/include/bits/posix1_lim.h:
 
 /usr/include/wchar.h:
 
@@ -1764,21 +1778,15 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /usr/include/bits/long-double.h:
 
-/usr/include/bits/floatn.h:
-
-/usr/include/c++/16/bits/vector.tcc:
-
-/usr/include/c++/16/bits/exception_defines.h:
-
 /usr/include/c++/16/bits/stl_raw_storage_iter.h:
 
 /usr/include/bits/endian.h:
 
+/usr/include/asm/errno.h:
+
 /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_standard.cpp:
 
 /usr/include/sys/types.h:
-
-/usr/include/asm/errno.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6DmaBufServerBufferPluginTargetsPrecheck.cmake:
 
@@ -1797,10 +1805,6 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 /usr/lib/cmake/Qt6Gui/Qt6QComposePlatformInputContextPluginTargetsPrecheck.cmake:
 
 /usr/include/qt6/QtCore/qlist.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginTargets-relwithdebinfo.cmake:
-
-/usr/include/bits/time.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QMinimalEglIntegrationPluginTargetsPrecheck.cmake:
 
@@ -1822,6 +1826,18 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /usr/include/qt6/QtWidgets/qrubberband.h:
 
+/usr/lib/cmake/Qt6Gui/Qt6QMngPluginTargetsPrecheck.cmake:
+
+/usr/include/bits/types/clockid_t.h:
+
+/usr/lib/cmake/Qt6/QtInstallPaths.cmake:
+
+/usr/include/c++/16/bits/stl_heap.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginTargets-relwithdebinfo.cmake:
+
+/usr/include/bits/time.h:
+
 /usr/lib/cmake/Qt6Core/Qt6CoreConfig.cmake:
 
 /usr/include/asm/types.h:
@@ -1834,19 +1850,23 @@ PasswordManager_autogen/timestamp: /home/gigelescu/Stuff/WeirdScripts/c++passwor
 
 /usr/include/bits/types/struct_FILE.h:
 
-/usr/include/c++/16/backward/auto_ptr.h:
+/usr/lib/cmake/Qt6/Qt6TargetsPrecheck.cmake:
 
-/usr/include/bits/posix1_lim.h:
-
-/usr/include/c++/16/cctype:
-
-/usr/lib/cmake/Qt6Core/Qt6CoreConfigVersion.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicExternalProjectHelpers.cmake:
+/usr/lib/cmake/Qt6/QtPublicCMakeVersionHelpers.cmake:
 
 /usr/include/qt6/QtCore/qsize.h:
 
 /usr/include/qt6/QtCore/qtnoop.h:
+
+/usr/include/c++/16/backward/auto_ptr.h:
+
+/usr/include/qt6/QtCore/qbytearray.h:
+
+/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/PasswordManager.h:
+
+/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.h:
+
+/usr/include/c++/16/bits/uses_allocator_args.h:
 
 PasswordManager_autogen/moc_predefs.h:
 
@@ -1864,10 +1884,6 @@ PasswordManager_autogen/moc_predefs.h:
 
 /usr/include/qt6/QtCore/qbasicatomic.h:
 
-/usr/include/bits/types/time_t.h:
-
-CMakeFiles/4.4.0/CMakeSystem.cmake:
-
 /usr/include/bits/endianness.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QXcbGlxIntegrationPluginTargets-relwithdebinfo.cmake:
@@ -1882,10 +1898,6 @@ CMakeFiles/4.4.0/CMakeSystem.cmake:
 
 /usr/include/c++/16/compare:
 
-/usr/include/c++/16/bits/localefwd.h:
-
-/usr/include/pthread.h:
-
 /usr/lib/cmake/Qt6Gui/Qt6QEglFSEmulatorIntegrationPluginTargets.cmake:
 
 CMakeFiles/4.4.0/CMakeCXXCompiler.cmake:
@@ -1893,6 +1905,24 @@ CMakeFiles/4.4.0/CMakeCXXCompiler.cmake:
 /usr/include/c++/16/ext/type_traits.h:
 
 /usr/include/bits/uio_lim.h:
+
+/usr/include/bits/floatn.h:
+
+/usr/include/c++/16/bits/vector.tcc:
+
+/usr/include/c++/16/bits/exception_defines.h:
+
+/usr/include/c++/16/bits/memory_resource.h:
+
+/usr/include/bits/types/sigset_t.h:
+
+/usr/include/c++/16/bits/std_abs.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandIntegrationPluginTargets.cmake:
+
+/usr/include/bits/pthread_stack_min-dynamic.h:
+
+/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.h:
 
 /usr/include/c++/16/bits/stream_iterator.h:
 
@@ -1916,8 +1946,6 @@ CMakeFiles/4.4.0/CMakeCXXCompiler.cmake:
 
 /usr/include/qt6/QtGui/qimage.h:
 
-/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/resources.qrc:
-
 /usr/include/c++/16/bits/stdexcept_except.h:
 
 /usr/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:
@@ -1933,6 +1961,10 @@ CMakeFiles/4.4.0/CMakeCXXCompiler.cmake:
 /usr/include/asm-generic/int-ll64.h:
 
 /usr/include/c++/16/version:
+
+/usr/lib/cmake/Qt6/QtPublicSbomLicenseHelpers.cmake:
+
+/usr/include/qt6/QtCore/qxptype_traits.h:
 
 /usr/include/asm/bitsperlong.h:
 
@@ -1992,17 +2024,19 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/qt6/QtGui/qaction.h:
 
-/usr/lib/cmake/Qt6Gui/Qt6QMngPluginTargetsPrecheck.cmake:
+/usr/include/pthread.h:
 
-/usr/include/bits/types/clockid_t.h:
+/usr/include/c++/16/bits/localefwd.h:
 
-/usr/lib/cmake/Qt6/QtInstallPaths.cmake:
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandEglClientBufferPluginConfig.cmake:
 
-/usr/include/c++/16/bits/stl_heap.h:
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandAdwaitaDecorationPluginTargets-relwithdebinfo.cmake:
 
-/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/PasswordManager.h:
+/usr/include/c++/16/unordered_map:
 
-/usr/include/qt6/QtCore/qbytearray.h:
+CMakeFiles/4.4.0/CMakeSystem.cmake:
+
+/usr/include/bits/types/time_t.h:
 
 /usr/include/bits/errno.h:
 
@@ -2076,6 +2110,12 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/qt6/QtCore/qsharedpointer.h:
 
+/usr/lib/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomPythonHelpers.cmake:
+
+/usr/include/bits/types/locale_t.h:
+
 /usr/lib/cmake/Qt6/QtPublicSbomFileHelpers.cmake:
 
 /usr/include/c++/16/tr1/modified_bessel_func.tcc:
@@ -2083,12 +2123,6 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 /usr/include/qt6/QtCore/qsystemdetection.h:
 
 /usr/include/bits/types/mbstate_t.h:
-
-/usr/include/c++/16/bits/memory_resource.h:
-
-/usr/include/bits/types/sigset_t.h:
-
-/usr/include/c++/16/bits/std_abs.h:
 
 /usr/include/bits/types/struct_itimerspec.h:
 
@@ -2117,8 +2151,6 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 /usr/include/c++/16/string:
 
 /usr/include/bits/timesize.h:
-
-/usr/include/c++/16/bits/uses_allocator_args.h:
 
 /usr/include/asm-generic/errno.h:
 
@@ -2180,8 +2212,6 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/lib/cmake/Qt6/FindWrapAtomic.cmake:
 
-/usr/include/c++/16/unordered_set:
-
 /usr/include/c++/16/bits/chrono.h:
 
 /usr/include/c++/16/bits/std_function.h:
@@ -2222,6 +2252,18 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/c++/16/bits/cxxabi_init_exception.h:
 
+/usr/lib/cmake/Qt6Gui/Qt6QXcbGlxIntegrationPluginTargetsPrecheck.cmake:
+
+/usr/include/c++/16/bits/utility.h:
+
+/usr/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake:
+
+/usr/include/c++/16/bits/hash_bytes.h:
+
+/usr/include/features.h:
+
+/usr/include/qt6/QtCore/q20iterator.h:
+
 /usr/include/bits/pthreadtypes-arch.h:
 
 /usr/include/qt6/QtCore/qgenericatomic.h:
@@ -2250,23 +2292,13 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/c++/16/bits/functexcept.h:
 
-/usr/lib/cmake/Qt6Gui/Qt6QXcbGlxIntegrationPluginTargetsPrecheck.cmake:
+/usr/include/c++/16/bits/shared_ptr.h:
 
-/usr/include/c++/16/bits/utility.h:
+/usr/include/c++/16/type_traits:
 
-/usr/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake:
+/usr/include/c++/16/typeinfo:
 
-/usr/include/c++/16/bits/hash_bytes.h:
-
-/usr/include/features.h:
-
-/usr/include/qt6/QtCore/q20iterator.h:
-
-/usr/include/qt6/QtGui/qkeysequence.h:
-
-/usr/include/qt6/QtGui/qpixelformat.h:
-
-/usr/include/c++/16/bits/hashtable_policy.h:
+/usr/include/c++/16/unordered_set:
 
 /usr/include/c++/16/variant:
 
@@ -2331,6 +2363,14 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 /usr/include/linux/stddef.h:
 
 /usr/include/linux/types.h:
+
+/usr/include/c++/16/bits/enable_special_members.h:
+
+/usr/include/qt6/QtCore/q17memory.h:
+
+/usr/include/qt6/QtCore/QVector:
+
+/usr/include/qt6/QtCore/qobjectdefs_impl.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QEvdevKeyboardPluginConfig.cmake:
 
@@ -2428,8 +2468,6 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/qt6/QtCore/qdatastream.h:
 
-/usr/lib/cmake/Qt6/QtPublicSbomGenerationHelpers.cmake:
-
 /usr/include/c++/16/exception:
 
 /usr/include/qt6/QtCore/qendian.h:
@@ -2439,10 +2477,6 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 /usr/include/qt6/QtCore/qexceptionhandling.h:
 
 /usr/include/qt6/QtCore/qfloat16.h:
-
-/usr/include/c++/16/cstdlib:
-
-/usr/include/qt6/QtCore/qlatin1stringview.h:
 
 /usr/include/qt6/QtCore/qsharedpointer_impl.h:
 
@@ -2512,8 +2546,6 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/qt6/QtCore/qobjectdefs.h:
 
-/usr/include/qt6/QtCore/qobjectdefs_impl.h:
-
 /usr/lib/cmake/Qt6Widgets/Qt6WidgetsTargets-relwithdebinfo.cmake:
 
 /usr/include/qt6/QtCore/qoverload.h:
@@ -2531,6 +2563,8 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 /usr/include/c++/16/algorithm:
 
 /usr/include/qt6/QtCore/qset.h:
+
+/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp:
 
 /usr/include/qt6/QtCore/qshareddata.h:
 
@@ -2618,6 +2652,10 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/qt6/QtCore/qvarlengtharray.h:
 
+/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/resources.qrc:
+
+/usr/include/qt6/QtCore/qvector.h:
+
 /usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginAdditionalTargetInfo.cmake:
 
 /usr/include/qt6/QtGui/QAction:
@@ -2684,6 +2722,18 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/qt6/QtWidgets/QDialog:
 
+/usr/include/c++/16/cstdlib:
+
+/usr/include/qt6/QtCore/qlatin1stringview.h:
+
+/usr/include/qt6/QtWidgets/QDialogButtonBox:
+
+/usr/include/c++/16/bits/shared_ptr_atomic.h:
+
+/usr/include/qt6/QtWidgets/qlistview.h:
+
+/usr/lib/cmake/Qt6/QtPublicSbomCycloneDXHelpers.cmake:
+
 /usr/include/bits/types/__FILE.h:
 
 /usr/include/qt6/QtWidgets/QLabel:
@@ -2710,6 +2760,8 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/qt6/QtWidgets/qabstractslider.h:
 
+/usr/include/qt6/QtWidgets/qdialogbuttonbox.h:
+
 /usr/lib/cmake/Qt6Gui/Qt6QEvdevKeyboardPluginAdditionalTargetInfo.cmake:
 
 /usr/include/qt6/QtCore/qbytearrayalgorithms.h:
@@ -2718,12 +2770,6 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/include/qt6/QtWidgets/qlabel.h:
 
-/usr/include/c++/16/bits/shared_ptr_atomic.h:
-
-/usr/include/qt6/QtWidgets/qlistview.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomCycloneDXHelpers.cmake:
-
 /usr/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake:
 
 /usr/include/qt6/QtWidgets/qpushbutton.h:
@@ -2731,12 +2777,6 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 /usr/include/qt6/QtWidgets/qstyleoption.h:
 
 /usr/include/qt6/QtWidgets/qtwidgetsexports.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginAdditionalTargetInfo.cmake:
-
-/usr/include/c++/16/cerrno:
-
-/usr/lib/cmake/Qt6/QtPublicSbomGenerationCycloneDXHelpers.cmake:
 
 /usr/include/qt6/QtWidgets/qtwidgetsglobal.h:
 
@@ -2786,24 +2826,8 @@ CMakeFiles/4.4.0/CMakeCCompiler.cmake:
 
 /usr/lib/cmake/Qt6/QtPublicCMakeHelpers.cmake:
 
-/usr/lib/cmake/Qt6/Qt6TargetsPrecheck.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicCMakeVersionHelpers.cmake:
-
 /usr/lib/cmake/Qt6/QtPublicGitHelpers.cmake:
 
 /usr/lib/cmake/Qt6/QtPublicPluginHelpers_v2.cmake:
 
 /usr/lib/cmake/Qt6/QtPublicSbomDocumentNamespaceHelpers.cmake:
-
-/usr/include/qt6/QtCore/qxptype_traits.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomLicenseHelpers.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicSbomOpsHelpers.cmake:
-
-/usr/lib/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake:
-
-/usr/include/bits/types/locale_t.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomPythonHelpers.cmake:

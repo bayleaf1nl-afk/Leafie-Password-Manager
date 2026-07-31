@@ -8,6 +8,10 @@
  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/CMakeFiles/4.4.0/CMakeSystem.cmake
  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/moc_predefs.h
  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/resources.qrc
+ /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp
+ /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.h
+ /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp
+ /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.h
  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp
  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.h
  /home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/PasswordEntry.h
@@ -288,6 +292,7 @@
  /usr/include/linux/types.h
  /usr/include/locale.h
  /usr/include/pthread.h
+ /usr/include/qt6/QtCore/QVector
  /usr/include/qt6/QtCore/q17memory.h
  /usr/include/qt6/QtCore/q20bit.h
  /usr/include/qt6/QtCore/q20functional.h
@@ -419,6 +424,7 @@
  /usr/include/qt6/QtCore/qutf8stringview.h
  /usr/include/qt6/QtCore/qvariant.h
  /usr/include/qt6/QtCore/qvarlengtharray.h
+ /usr/include/qt6/QtCore/qvector.h
  /usr/include/qt6/QtCore/qversiontagging.h
  /usr/include/qt6/QtCore/qxptype_traits.h
  /usr/include/qt6/QtCore/qyieldcpu.h
@@ -456,6 +462,7 @@
  /usr/include/qt6/QtGui/qvalidator.h
  /usr/include/qt6/QtGui/qwindowdefs.h
  /usr/include/qt6/QtWidgets/QDialog
+ /usr/include/qt6/QtWidgets/QDialogButtonBox
  /usr/include/qt6/QtWidgets/QLabel
  /usr/include/qt6/QtWidgets/QLineEdit
  /usr/include/qt6/QtWidgets/QListWidget
@@ -470,6 +477,7 @@
  /usr/include/qt6/QtWidgets/qabstractspinbox.h
  /usr/include/qt6/QtWidgets/qaction.h
  /usr/include/qt6/QtWidgets/qdialog.h
+ /usr/include/qt6/QtWidgets/qdialogbuttonbox.h
  /usr/include/qt6/QtWidgets/qframe.h
  /usr/include/qt6/QtWidgets/qlabel.h
  /usr/include/qt6/QtWidgets/qlineedit.h

@@ -10,6 +10,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/PasswordManager_autogen/mocs_compilation.cpp" "CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o" "gcc" "CMakeFiles/PasswordManager.dir/PasswordManager_autogen/mocs_compilation.cpp.o.d"
   "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/build/qrc_resources.cpp" "CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o" "gcc" "CMakeFiles/PasswordManager.dir/qrc_resources.cpp.o.d"
+  "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/GenericDialog.cpp" "CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o" "gcc" "CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o.d"
+  "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/LoginGate.cpp" "CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o" "gcc" "CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o.d"
   "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/MainWindow.cpp" "CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o" "gcc" "CMakeFiles/PasswordManager.dir/src/MainWindow.cpp.o.d"
   "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/main.cpp" "CMakeFiles/PasswordManager.dir/src/main.cpp.o" "gcc" "CMakeFiles/PasswordManager.dir/src/main.cpp.o.d"
   "/home/gigelescu/Stuff/WeirdScripts/c++passwordmanager/src/platform/WindowManager_standard.cpp" "CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o" "gcc" "CMakeFiles/PasswordManager.dir/src/platform/WindowManager_standard.cpp.o.d"

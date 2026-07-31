@@ -203,6 +203,54 @@ qrc_resources.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PasswordManager.dir/build.make CMakeFiles/PasswordManager.dir/qrc_resources.cpp.s
 .PHONY : qrc_resources.cpp.s
 
+src/GenericDialog.o: src/GenericDialog.cpp.o
+.PHONY : src/GenericDialog.o
+
+# target to build an object file
+src/GenericDialog.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PasswordManager.dir/build.make CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.o
+.PHONY : src/GenericDialog.cpp.o
+
+src/GenericDialog.i: src/GenericDialog.cpp.i
+.PHONY : src/GenericDialog.i
+
+# target to preprocess a source file
+src/GenericDialog.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PasswordManager.dir/build.make CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.i
+.PHONY : src/GenericDialog.cpp.i
+
+src/GenericDialog.s: src/GenericDialog.cpp.s
+.PHONY : src/GenericDialog.s
+
+# target to generate assembly for a file
+src/GenericDialog.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PasswordManager.dir/build.make CMakeFiles/PasswordManager.dir/src/GenericDialog.cpp.s
+.PHONY : src/GenericDialog.cpp.s
+
+src/LoginGate.o: src/LoginGate.cpp.o
+.PHONY : src/LoginGate.o
+
+# target to build an object file
+src/LoginGate.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PasswordManager.dir/build.make CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.o
+.PHONY : src/LoginGate.cpp.o
+
+src/LoginGate.i: src/LoginGate.cpp.i
+.PHONY : src/LoginGate.i
+
+# target to preprocess a source file
+src/LoginGate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PasswordManager.dir/build.make CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.i
+.PHONY : src/LoginGate.cpp.i
+
+src/LoginGate.s: src/LoginGate.cpp.s
+.PHONY : src/LoginGate.s
+
+# target to generate assembly for a file
+src/LoginGate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PasswordManager.dir/build.make CMakeFiles/PasswordManager.dir/src/LoginGate.cpp.s
+.PHONY : src/LoginGate.cpp.s
+
 src/MainWindow.o: src/MainWindow.cpp.o
 .PHONY : src/MainWindow.o
 
@@ -340,6 +388,12 @@ help:
 	@echo "... qrc_resources.o"
 	@echo "... qrc_resources.i"
 	@echo "... qrc_resources.s"
+	@echo "... src/GenericDialog.o"
+	@echo "... src/GenericDialog.i"
+	@echo "... src/GenericDialog.s"
+	@echo "... src/LoginGate.o"
+	@echo "... src/LoginGate.i"
+	@echo "... src/LoginGate.s"
 	@echo "... src/MainWindow.o"
 	@echo "... src/MainWindow.i"
 	@echo "... src/MainWindow.s"

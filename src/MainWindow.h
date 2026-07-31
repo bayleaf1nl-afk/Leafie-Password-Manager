@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QDialog>
+#include <QDialogButtonBox>
 
 namespace Utilities {
     QString generatePassword();
@@ -27,6 +28,8 @@ class MainWindow : public QMainWindow
     private:
         void createActions();
         void createMenus();
+        QLineEdit *genericInput;
+        QDialogButtonBox *genericButtonBox;
         QPushButton* addButton;
         QPushButton* delButton;
         QListWidget* passwordList;
@@ -47,8 +50,7 @@ class MainWindow : public QMainWindow
     private slots:
         void NewPassword();
         void RemovePassword();
-        void OpenLoginDialog();
-        void ExportVault();
-        void ImportVault();
+        void ExportDialog();
+        void ImportDialog();
 
 };
