@@ -20,12 +20,13 @@ qt_add_executable(PasswordManager
     src/PasswordManager.h
     src/GenericDialog.h
     src/LoginGate.h
+    src/platform/WindowManager.h
+
+    src/PasswordEntry.cpp
     src/LoginGate.cpp
     src/GenericDialog.cpp
     src/MainWindow.cpp
     src/main.cpp
-
-    src/platform/WindowManager.h
     src/platform/WindowManager_standard.cpp
     src/platform/WindowManager_tiling.cpp
     src/platform/WindowUtils.cpp

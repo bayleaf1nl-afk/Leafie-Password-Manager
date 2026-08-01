@@ -1,9 +1,12 @@
 #pragma once
+#include "PasswordEntry.h"
 #include <QMainWindow>
 #include <QWidget>
 #include <qaction.h>
+#include <qcontainerfwd.h>
 #include <qlabel.h>
 #include <qmainwindow.h>
+#include <qobject.h>
 #include <qtmetamacros.h>
 #include <QPushButton>
 #include <QListWidget>
@@ -32,6 +35,8 @@ class MainWindow : public QMainWindow
         QDialogButtonBox *genericButtonBox;
         QPushButton* addButton;
         QPushButton* delButton;
+        QPushButton* exportButton;
+        QPushButton* importButton;
         QListWidget* passwordList;
         QLineEdit* searchBox;
         QMenuBar* topMenu;
@@ -46,11 +51,14 @@ class MainWindow : public QMainWindow
         QAction *exportAct;
         QAction *importAct;
         QLabel *infoLabel;
+        QVector<PasswordEntry> entries;
         //------------//
     private slots:
         void NewPassword();
         void RemovePassword();
-        void ExportDialog();
-        void ImportDialog();
-
+        void ExportVault();
+        void ImportVault();
+        void SaveVault();
+        void LoadVault();
+        void FilterPasswords(const QString &text);
 };

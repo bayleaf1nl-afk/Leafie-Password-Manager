@@ -7,8 +7,7 @@
 #include <QApplication>
 #include <qdebug.h>
 #include <qtenvironmentvariables.h>
-namespace Platform{
-namespace TilingWM{
+namespace Platform::TilingWM{
 
 bool available(){
     return qEnvironmentVariableIsSet("HYPRLAND_INSTANCE_SIGNATURE");
@@ -56,4 +55,4 @@ void requestFloating(QWidget* window)
 }
 
 }
-}
+
