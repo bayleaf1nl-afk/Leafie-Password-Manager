@@ -31,6 +31,8 @@ class MainWindow : public QMainWindow
     private:
         void createActions();
         void createMenus();
+        void createLayout();
+        void showAboutDialog();
         QLineEdit *genericInput;
         QDialogButtonBox *genericButtonBox;
         QPushButton* addButton;
@@ -42,9 +44,8 @@ class MainWindow : public QMainWindow
         QMenuBar* topMenu;
         QMenu *fileMenu;
         QMenu *editMenu;
-        QMenu *formatMenu;
+        QMenu *settingsMenu;
         QMenu *helpMenu;
-        QActionGroup *alignmentGroup;
         QAction *newPasswordAct;
         QAction *deletePasswordAct;
         QAction *loginAct;

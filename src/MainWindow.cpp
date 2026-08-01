@@ -4,7 +4,6 @@
 #include "PasswordManager.h"
 #include "GenericDialog.h"
 #include "platform/WindowManager.h"
-#include "PasswordEntry.h"
 //---------------------------//
 #include <QApplication>
 #include <QFile>
@@ -19,19 +18,75 @@
 #include <QProcess>
 #include <QTimer>
 #include <QScreen>
-#include <cmath>
-#include <filesystem>
+#include <qaction.h>
+#include <qcoreapplication.h>
 #include <qfiledevice.h>
 #include <qjsonarray.h>
 #include <qjsondocument.h>
+#include <qkeysequence.h>
 #include <qlineedit.h>
+#include <qlistwidget.h>
 #include <qlogging.h>
+#include <qnamespace.h>
 #include <qpicture.h>
 #include <qpushbutton.h>
 #include <qwindowdefs.h>
+#include <QMessageBox>
 
 MainWindow::MainWindow() {
   setWindowTitle("Leaf's Password Manager");
+  createLayout();
+  createActions();
+  createMenus();
+
+  LoadVault();
+}
+
+
+
+void MainWindow::createActions(){
+    newPasswordAct = new QAction("Add Password", this);
+    newPasswordAct->setShortcut(QKeySequence("Ctrl + N"));
+    connect(newPasswordAct, &QAction::triggered, this, &MainWindow::NewPassword);
+
+    deletePasswordAct = new QAction("Delete Password", this);
+    deletePasswordAct->setShortcut(QKeySequence::Delete);
+    connect(deletePasswordAct, &QAction::triggered, this, &MainWindow::RemovePassword);
+
+    exportAct = new QAction("Export", this);
+    connect(exportAct, &QAction::triggered, this, &MainWindow::ExportVault);
+
+    importAct = new QAction("Import", this);
+    connect(importAct, &QAction::triggered, this, &MainWindow::ImportVault);
+}
+
+void MainWindow::createMenus(){
+    fileMenu = topMenu->addMenu("File");
+    editMenu = topMenu->addMenu("Edit");
+    settingsMenu = topMenu->addMenu("Settings");
+    helpMenu = topMenu->addMenu("Help");
+
+    //--------------------------------//
+
+    fileMenu->addAction(exportAct);
+    fileMenu->addAction(importAct);
+    fileMenu->addSeparator();
+    fileMenu->addAction("Quit", this, &QCoreApplication::quit);
+
+    editMenu->addAction(newPasswordAct);
+    editMenu->addAction(deletePasswordAct);
+
+    helpMenu->addAction("About", this, &MainWindow::showAboutDialog);
+
+    setMenuBar(topMenu);
+    
+}
+
+void MainWindow::showAboutDialog(){
+    QMessageBox::information(this, "About", "gng u cant be serious its a PASSWORD MANAGER");
+}
+
+void MainWindow::createLayout(){
   auto *central = new QWidget;
   setCentralWidget(central);
   auto *layout = new QVBoxLayout(central);
@@ -56,8 +111,6 @@ MainWindow::MainWindow() {
   searchBox = new QLineEdit(this);
 
   layout->setContentsMargins(5, 5, 5, 5);
-  layout->addWidget(addButton);
-  layout->addWidget(delButton);
   layout->addWidget(passwordList);
   layout->addWidget(searchBox);
   layout->addWidget(topMenu);
@@ -68,11 +121,8 @@ MainWindow::MainWindow() {
   connect(delButton, &QPushButton::clicked, this, &MainWindow::RemovePassword);
   connect(exportButton, &QPushButton::clicked, this, &MainWindow::ExportVault);
   connect(importButton, &QPushButton::clicked, this, &MainWindow::ImportVault);
-
-  LoadVault();
+  connect(searchBox, &QLineEdit::textChanged, this, &MainWindow::FilterPasswords);
 }
-
-
 
 void MainWindow::NewPassword(){
     QVector<DialogField> fields = {
@@ -165,5 +215,13 @@ void MainWindow::LoadVault(){
         PasswordEntry entry = PasswordEntry::fromJson(val.toObject());
         entries.push_back(entry);
         passwordList->addItem(entry.site);
+    }
+}
+
+void MainWindow::FilterPasswords(const QString &text){
+    for (int i = 0; i < passwordList->count(); ++i){
+        QListWidgetItem *item = passwordList->item(i);
+        bool matches = item->text().contains(text, Qt::CaseInsensitive);
+        item->setHidden(!matches);
     }
 }
