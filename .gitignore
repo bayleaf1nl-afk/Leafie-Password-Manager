@@ -67,3 +67,4 @@ vcpkg_installed/
 Testing/
 .cache/
 /vault.json
+.vscode/settings.json
