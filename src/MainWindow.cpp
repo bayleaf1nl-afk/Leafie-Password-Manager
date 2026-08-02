@@ -38,7 +38,6 @@ MainWindow::MainWindow() {
   createLayout();
   createActions();
   createMenus();
-
   LoadVault();
 }
 
@@ -170,7 +169,7 @@ void MainWindow::ExportVault(){
     }
 }
 void MainWindow::ImportVault(){
-    GenericDialog dlg("Import Vault", {{"Import to: ", QLineEdit::Normal}}, true, this);
+    GenericDialog dlg("Import Vault", {{"Import from: ", QLineEdit::Normal}}, true, this);
     if (dlg.exec() != QDialog::Accepted) return;
     
     QString path = dlg.inputText(0);
