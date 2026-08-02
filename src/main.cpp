@@ -30,26 +30,13 @@ int main(int argc, char *argv[])
 
     MainWindow window;
     QFile file(":/styles.qss");
-    
 
     if (file.open(QFile::ReadOnly))
         app.setStyleSheet(file.readAll());
     else
         qWarning() << file.errorString();
 
-    QTimer::singleShot(
-        10,
-    [&window]
-    {
-        if (Platform::TilingWM::available()) 
-        {
-            Platform::TilingWM::requestFloating(&window);
-        }
-        else
-        {
-            Platform::StandardWM::requestFloating(&window);
-        }
-    });
+    Platform::attemptFloating(&window);
     
     window.resize(800, 600);
     window.show();

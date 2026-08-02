@@ -2,6 +2,7 @@
 #include <QWidget>
 
 namespace Platform {
+    void attemptFloating(QWidget *window);
 
     namespace StandardWM {
         void requestFloating(QWidget *);
@@ -14,5 +15,6 @@ namespace Platform {
     namespace WindowUtils{
         void centerWindow(QWidget* window);
     }
+
 
 } // namespace Platform
