@@ -1,6 +1,6 @@
 #pragma once
 #include <QWidget>
-
+#include "../PasswordEntry.h"
 namespace Platform {
     void attemptFloating(QWidget *window);
 
@@ -14,6 +14,7 @@ namespace Platform {
     }
     namespace WindowUtils{
         void centerWindow(QWidget* window);
+        void copyToClipboard(const PasswordEntry &entry);
     }
 
 

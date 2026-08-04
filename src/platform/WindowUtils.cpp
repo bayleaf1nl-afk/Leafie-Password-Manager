@@ -3,7 +3,8 @@
 #include <QScreen>
 #include <QPointer>
 #include <QTimer>
-
+#include <QClipboard>
+#include "../PasswordEntry.h"
 namespace Platform::WindowUtils {
     void centerWindow(QWidget* window){
         QScreen* screen = window->screen(); 
@@ -14,6 +15,9 @@ namespace Platform::WindowUtils {
         window->move(geometry.center() - window->rect().center());
     }
     
+    void copyToClipboard(const PasswordEntry &entry){
+        QApplication::clipboard()->setText(entry.password);
+    }
 }
 
 namespace Platform {

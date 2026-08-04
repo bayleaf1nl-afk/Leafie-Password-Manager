@@ -33,11 +33,7 @@ void requestFloating(QWidget *window) {
 
       QString address = obj["address"].toString();
 
-      QProcess::startDetached(
-          "hyprctl",
-          {"dispatch", QString("hl.dispatch(hl.dsp.window.float({ action = "
-                               "\"set\", window = \"address:%1\" }))")
-                           .arg(address)});
+      QProcess::startDetached("hyprctl",{"dispatch", QString("hl.dispatch(hl.dsp.window.float({ action = ""\"set\", window = \"address:%1\" }))").arg(address)});
 
       return;
     }

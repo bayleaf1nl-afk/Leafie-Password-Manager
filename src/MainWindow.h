@@ -62,4 +62,5 @@ class MainWindow : public QMainWindow
         void SaveVault();
         void LoadVault();
         void FilterPasswords(const QString &text);
+        void addEntryToList(const PasswordEntry &entry);
 };

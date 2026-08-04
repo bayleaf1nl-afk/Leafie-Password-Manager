@@ -19,19 +19,25 @@
 #include <QTimer>
 #include <QScreen>
 #include <qaction.h>
+#include <qapplication.h>
+#include <qboxlayout.h>
 #include <qcoreapplication.h>
 #include <qfiledevice.h>
 #include <qjsonarray.h>
 #include <qjsondocument.h>
 #include <qkeysequence.h>
+#include <qlabel.h>
 #include <qlineedit.h>
 #include <qlistwidget.h>
 #include <qlogging.h>
 #include <qnamespace.h>
 #include <qpicture.h>
 #include <qpushbutton.h>
+#include <qsize.h>
+#include <qwidget.h>
 #include <qwindowdefs.h>
 #include <QMessageBox>
+#include <QClipboard>
 
 MainWindow::MainWindow() {
   setWindowTitle("Leaf's Password Manager");
@@ -138,7 +144,7 @@ void MainWindow::NewPassword(){
         entry.password = dlg.inputText(2);
         
         entries.push_back(entry);
-        passwordList->addItem(entry.site);
+        addEntryToList(entry);
         SaveVault();
     }
 }
@@ -181,7 +187,7 @@ void MainWindow::ImportVault(){
     for (const auto &var : array){
         PasswordEntry entry = PasswordEntry::fromJson(var.toObject());
         entries.push_back(entry);
-        passwordList->addItem(entry.site);
+        addEntryToList(entry);
     }
     SaveVault();
 }
@@ -213,14 +219,35 @@ void MainWindow::LoadVault(){
     for (const auto &val : array){
         PasswordEntry entry = PasswordEntry::fromJson(val.toObject());
         entries.push_back(entry);
-        passwordList->addItem(entry.site);
+        addEntryToList(entry);
     }
 }
 
 void MainWindow::FilterPasswords(const QString &text){
     for (int i = 0; i < passwordList->count(); ++i){
         QListWidgetItem *item = passwordList->item(i);
-        bool matches = item->text().contains(text, Qt::CaseInsensitive);
-        item->setHidden(!matches);
+        bool matches = entries[i].site.contains(text, Qt::CaseInsensitive);
+        passwordList->item(i)->setHidden(!matches);
     }
+}
+
+
+
+void MainWindow::addEntryToList(const PasswordEntry &entry){
+    QListWidgetItem *item = new QListWidgetItem(passwordList);
+    QWidget *rowWidget = new QWidget;
+    auto *rowLayout = new QHBoxLayout(rowWidget);
+
+    rowLayout->addWidget(new QLabel(entry.site));
+    rowLayout->addWidget(new QLabel(entry.username));
+    rowLayout->addWidget(new QLabel(QString(entry.password.length(), '*')));
+    
+    auto *copyButton = new QPushButton("Copy");
+    connect(copyButton, &QPushButton::clicked, this, [entry](){Platform::WindowUtils::copyToClipboard(entry);});
+    rowLayout->addWidget(copyButton);
+    
+    rowLayout->setContentsMargins(4, 2, 4, 2);
+    item->setSizeHint(rowWidget->sizeHint() + QSize(40, 20));
+    passwordList->addItem(item);
+    passwordList->setItemWidget(item, rowWidget);
 }
