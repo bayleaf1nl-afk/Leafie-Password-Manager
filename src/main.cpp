@@ -5,41 +5,41 @@
 #include "platform/WindowManager.h"
 //---------------------------//
 #include <QApplication>
+#include <QDialog>
 #include <QFile>
-#include <QPushButton>
-#include <QListWidget>
+#include <QLabel>
 #include <QLineEdit>
+#include <QListWidget>
+#include <QMenuBar>
+#include <QProcess>
+#include <QPushButton>
+#include <QScreen>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QMenuBar>
-#include <QLabel>
-#include <QDialog>
-#include <QProcess>
-#include <QTimer>
-#include <QScreen>
+#include <qtmetamacros.h>
 
-int main(int argc, char *argv[])
-{   
-    QApplication app(argc, argv);
-    app.setApplicationName("PasswordManager");
+int main(int argc, char *argv[]) {
+  QApplication app(argc, argv);
+  app.setApplicationName("PasswordManager");
 
-    QString masterPassword;
-    if(!LoginGate::authenticate(masterPassword)){
-        return 0;
-    }
+  QString masterPassword;
+  if (!LoginGate::authenticate(masterPassword)) {
+    return 0;
+  }
 
-    MainWindow window;
-    QFile file(":/styles.qss");
+  MainWindow window;
+  QFile file(":/styles.qss");
 
-    if (file.open(QFile::ReadOnly))
-        app.setStyleSheet(file.readAll());
-    else
-        qWarning() << file.errorString();
+  if (file.open(QFile::ReadOnly))
+    app.setStyleSheet(file.readAll());
+  else
+    qWarning() << file.errorString();
 
-    Platform::attemptFloating(&window);
-    
-    window.resize(800, 600);
-    window.show();
-    Platform::WindowUtils::centerWindow(&window);
-    return app.exec();
+  Platform::attemptFloating(&window);
+
+  window.resize(800, 600);
+  window.show();
+  Platform::WindowUtils::centerWindow(&window);
+  return app.exec();
 }

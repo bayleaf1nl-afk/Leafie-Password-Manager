@@ -68,3 +68,4 @@ Testing/
 .cache/
 /vault.json
 .vscode/settings.json
+master.txt
