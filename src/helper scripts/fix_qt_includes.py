@@ -2,6 +2,8 @@ import re
 import sys
 from pathlib import Path
 
+"""usage: python3 fix_qt_includes.py <directory>. it is recursive."""
+
 
 QT_HEADER_MAP = {
     # QtCore
