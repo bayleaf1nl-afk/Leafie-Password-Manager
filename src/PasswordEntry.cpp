@@ -1,19 +1,18 @@
 #include "PasswordEntry.h"
 #include <QJsonObject>
-#include <qjsonobject.h>
 
 QJsonObject PasswordEntry::toJson() const {
-    QJsonObject obj;
-    obj["site"] = site;
-    obj["username"] = username;
-    obj["password"] = password;
-    return obj;
+  QJsonObject obj;
+  obj["site"]     = site;
+  obj["username"] = username;
+  obj["password"] = password;
+  return obj;
 }
 
 PasswordEntry PasswordEntry::fromJson(const QJsonObject &obj) {
-    PasswordEntry entry;
-    entry.site = obj["site"].toString();
-    entry.username = obj["username"].toString();
-    entry.password = obj["password"].toString();
-    return entry;
+  PasswordEntry entry;
+  entry.site     = obj["site"].toString();
+  entry.username = obj["username"].toString();
+  entry.password = obj["password"].toString();
+  return entry;
 }

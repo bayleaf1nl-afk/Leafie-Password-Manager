@@ -1,66 +1,80 @@
 #pragma once
 #include "PasswordEntry.h"
-#include <QMainWindow>
-#include <QWidget>
-#include <qaction.h>
-#include <qcontainerfwd.h>
-#include <qlabel.h>
-#include <qmainwindow.h>
-#include <qobject.h>
-#include <qtmetamacros.h>
-#include <QPushButton>
-#include <QListWidget>
-#include <QLineEdit>
-#include <QLabel>
+#include <QAction>
+#include <QBoxLayout>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QMainWindow>
+#include <QObject>
+#include <QPushButton>
+#include <QWidget>
+#include <qcontainerfwd.h>
+#include <qtmetamacros.h>
 
 namespace Utilities {
-    QString generatePassword();
-    bool isStrongPassword();
-}
+QString generatePassword();
+bool    isStrongPassword();
+} // namespace Utilities
 
+class MainWindow : public QMainWindow {
+  Q_OBJECT
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+public:
+  MainWindow();
 
-    public:
-        MainWindow();
+private:
+  //-------------//
+  QLineEdit *website;
+  QLineEdit *username;
+  QLineEdit *password;
 
-    private:
-        void createActions();
-        void createMenus();
-        void createLayout();
-        void showAboutDialog();
-        QLineEdit *genericInput;
-        QDialogButtonBox *genericButtonBox;
-        QPushButton* addButton;
-        QPushButton* delButton;
-        QPushButton* exportButton;
-        QPushButton* importButton;
-        QListWidget* passwordList;
-        QLineEdit* searchBox;
-        QMenuBar* topMenu;
-        QMenu *fileMenu;
-        QMenu *editMenu;
-        QMenu *settingsMenu;
-        QMenu *helpMenu;
-        QAction *newPasswordAct;
-        QAction *deletePasswordAct;
-        QAction *loginAct;
-        QAction *exportAct;
-        QAction *importAct;
-        QLabel *infoLabel;
-        QVector<PasswordEntry> entries;
-        //------------//
-    private slots:
-        void NewPassword();
-        void RemovePassword();
-        void ExportVault();
-        void ImportVault();
-        void SaveVault();
-        void LoadVault();
-        void FilterPasswords(const QString &text);
-        void addEntryToList(const PasswordEntry &entry);
+  QLineEdit             *genericInput;
+  QDialogButtonBox      *genericButtonBox;
+  QPushButton           *addButton;
+  QPushButton           *delButton;
+  QPushButton           *exportButton;
+  QPushButton           *importButton;
+  QListWidget           *passwordList;
+  QLineEdit             *searchBox;
+  QMenuBar              *topMenu;
+  QMenu                 *fileMenu;
+  QMenu                 *editMenu;
+  QMenu                 *settingsMenu;
+  QMenu                 *helpMenu;
+  QAction               *newPasswordAct;
+  QAction               *deletePasswordAct;
+  QAction               *editPasswordAct;
+  QAction               *loginAct;
+  QAction               *exportAct;
+  QAction               *importAct;
+  QLabel                *infoLabel;
+  QVector<PasswordEntry> entries;
+
+  //------------//
+
+  void     createActions();
+  void     createMenus();
+  void     createLayout();
+  void     showAboutDialog();
+  void     SaveVault();
+  void     LoadVault();
+  void     addEntryToList(const PasswordEntry &entry);
+  void     editPassword(PasswordEntry &entry);
+  void     editPasswordMenu();
+  void     createFileMenu();
+  void     createEditMenu();
+  void     createSettingsMenu();
+  void     createHelpMenu();
+  QWidget *createLeftPanel();
+  QWidget *createRightPanel();
+
+private slots:
+  void NewPassword();
+  void RemovePassword();
+  void ExportVault();
+  void ImportVault();
+  void FilterPasswords(const QString &text);
 };

@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
   }
 
   MainWindow window;
-  QFile file(":/styles.qss");
+  QFile      file(":/styles.qss");
 
   if (file.open(QFile::ReadOnly))
     app.setStyleSheet(file.readAll());

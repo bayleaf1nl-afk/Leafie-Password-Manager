@@ -1,16 +1,14 @@
 #include "WindowManager.h"
 #include <QApplication>
+#include <QDebug>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcess>
-#include <qdebug.h>
 #include <qtenvironmentvariables.h>
 namespace Platform::TilingWM {
 
-bool available() {
-  return qEnvironmentVariableIsSet("HYPRLAND_INSTANCE_SIGNATURE");
-}
+bool available() { return qEnvironmentVariableIsSet("HYPRLAND_INSTANCE_SIGNATURE"); }
 
 void requestFloating(QWidget *window) {
   QProcess proc;
@@ -33,7 +31,9 @@ void requestFloating(QWidget *window) {
 
       QString address = obj["address"].toString();
 
-      QProcess::startDetached("hyprctl",{"dispatch", QString("hl.dispatch(hl.dsp.window.float({ action = ""\"set\", window = \"address:%1\" }))").arg(address)});
+      QProcess::startDetached("hyprctl", {"dispatch", QString("hl.dispatch(hl.dsp.window.float({ action = "
+                                                              "\"set\", window = \"address:%1\" }))")
+                                                          .arg(address)});
 
       return;
     }
