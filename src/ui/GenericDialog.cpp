@@ -12,6 +12,7 @@
 #include <QWidget>
 #include <qcontainerfwd.h>
 #include <qwindowdefs.h>
+namespace DialogUtils {
 
 GenericDialog::GenericDialog(const QString &Title, const QVector<DialogField> &fields, bool showFileSelectionButton,
                              QWidget *parent)
@@ -47,3 +48,5 @@ void GenericDialog::browseForFile() {
     genericInputs.last()->setText(path);
   }
 }
+
+} // namespace DialogUtils

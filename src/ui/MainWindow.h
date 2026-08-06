@@ -61,6 +61,7 @@ private:
   void     LoadVault();
   void     addEntryToList(const PasswordEntry &entry);
   void     editPassword(PasswordEntry &entry);
+  bool     isDuplicateEntry(const QString &site, const QString &username) const;
   void     editPasswordMenu();
   void     createFileMenu();
   void     createEditMenu();

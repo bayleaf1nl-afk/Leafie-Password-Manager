@@ -16,7 +16,7 @@ bool LoginGate::authenticate(QString &outMasterPassword) {
   QString label         = isFirstLaunch ? "Make New Master Password:" : "Enter Master Password:";
 
   if (isFirstLaunch) {
-    GenericDialog dialog(title, {{label, QLineEdit::Password}}, false, nullptr);
+    DialogUtils::GenericDialog dialog(title, {{label, QLineEdit::Password}}, false, nullptr);
     if (dialog.exec() != QDialog::Accepted) return false;
     Platform::attemptFloating(&dialog);
     outMasterPassword = dialog.inputText(0);
@@ -37,8 +37,8 @@ bool LoginGate::authenticate(QString &outMasterPassword) {
 
   const int maxAttempts = 3;
   for (int attempt = 1; attempt <= maxAttempts; ++attempt) {
-    QString       label = QString("Master Password (%1/%2 attempts): ").arg(attempt).arg(maxAttempts);
-    GenericDialog dlg("Login", {{label, QLineEdit::Password}}, false);
+    QString                    label = QString("Master Password (%1/%2 attempts): ").arg(attempt).arg(maxAttempts);
+    DialogUtils::GenericDialog dlg("Login", {{label, QLineEdit::Password}}, false);
 
     if (dlg.exec() != QDialog::Accepted) return false;
     if (dlg.inputText(0) == stored) return true;

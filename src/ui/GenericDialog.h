@@ -5,7 +5,6 @@
 #include <QObject>
 #include <QVector>
 #include <QWidget>
-#include <cstddef>
 #include <qcontainerfwd.h>
 #include <qtmetamacros.h>
 #include <qwindowdefs.h>
@@ -13,6 +12,8 @@ struct DialogField {
   QString             label;
   QLineEdit::EchoMode echoMode = QLineEdit::Normal;
 };
+
+namespace DialogUtils {
 
 class GenericDialog : public QDialog {
   Q_OBJECT
@@ -28,3 +29,5 @@ private:
 private slots:
   void browseForFile();
 };
+
+} // namespace DialogUtils

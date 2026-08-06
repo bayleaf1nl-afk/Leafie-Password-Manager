@@ -1,8 +1,8 @@
-#include "LoginGate.h"
-#include "MainWindow.h"
-#include "PasswordEntry.h"
-#include "PasswordManager.h"
+#include "core/LoginGate.h"
 #include "platform/WindowManager.h"
+#include "ui/MainWindow.h"
+#include "vault/PasswordEntry.h"
+#include "vault/PasswordManager.h"
 //---------------------------//
 #include <QApplication>
 #include <QDialog>

@@ -3,6 +3,7 @@
 #include "../platform/WindowManager.h"
 #include "../vault/PasswordEntry.h"
 #include "../vault/PasswordManager.h"
+#include "DialogUtils.h"
 #include "GenericDialog.h"
 //---------------------------//
 #include <QAction>
@@ -31,6 +32,9 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <Qt>
+#include <qcontainerfwd.h>
+#include <qhashfunctions.h>
+#include <qlabel.h>
 #include <qlogging.h>
 #include <qmenubar.h>
 #include <qmessagebox.h>
@@ -123,6 +127,17 @@ QWidget *MainWindow::createLeftPanel() {
   auto *leftWidget   = new QWidget;
   auto *layout       = new QVBoxLayout(leftWidget);
   auto *bottomFiller = new QWidget;
+  auto *header       = new QWidget(this);
+  auto *headerLayout = new QHBoxLayout(header);
+
+  headerLayout->addWidget(new QLabel("<b>Site</b>"), 2);
+  headerLayout->addWidget(new QLabel("<b>Username</b>"), 2);
+  headerLayout->addWidget(new QLabel("<b>Email</b>"), 2);
+  headerLayout->addWidget(new QLabel("<b>Password</b>"), 2);
+  headerLayout->addWidget(new QLabel(""), 1); // spacer matching the Copy button column
+
+  headerLayout->setContentsMargins(4, 2, 4, 2);
+  layout->addWidget(header);
   bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
   addButton    = new QPushButton("Add", leftWidget);
@@ -159,30 +174,28 @@ void MainWindow::NewPassword() {
       {"Password: ", QLineEdit::Password},
   };
 
-  GenericDialog dlg("New Password", fields, false, this);
+  DialogUtils::GenericDialog dlg("New Password", fields, false, this);
   if (dlg.exec() == QDialog::Accepted) {
     PasswordEntry entry;
     entry.site     = dlg.inputText(0);
     entry.username = dlg.inputText(1);
     entry.password = dlg.inputText(2);
+    if (MainWindow::isDuplicateEntry(entry.site, entry.username)) {
+    }
 
     entries.push_back(entry);
     addEntryToList(entry);
     SaveVault();
   }
 }
+
 void MainWindow::RemovePassword() {
   const int row = passwordList->currentRow();
   if (row < 0) {
     return;
   }
-  auto msgBox = QMessageBox();
-  msgBox.setWindowTitle("Confirmation");
-  msgBox.setText("Are you sure you want to remove this entry?");
-  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  msgBox.setDefaultButton(QMessageBox::No);
-  msgBox.setIcon(QMessageBox::NoIcon);
-  int choice = msgBox.exec();
+  int choice =
+      DialogUtils::confirmationWindow(QString("Confirmation"), QString("Are you sure you want to delete this entry?"));
 
   if (choice == QMessageBox::Yes) {
     delete passwordList->takeItem(row);
@@ -193,7 +206,7 @@ void MainWindow::RemovePassword() {
   }
 }
 void MainWindow::ExportVault() {
-  GenericDialog dlg("Export Vault", {{"Export to: ", QLineEdit::Normal}}, true, this);
+  DialogUtils::GenericDialog dlg("Export Vault", {{"Export to: ", QLineEdit::Normal}}, true, this);
   if (dlg.exec() != QDialog::Accepted) return;
 
   QString path = dlg.inputText(0);
@@ -210,7 +223,7 @@ void MainWindow::ExportVault() {
   }
 }
 void MainWindow::ImportVault() {
-  GenericDialog dlg("Import Vault", {{"Import from: ", QLineEdit::Normal}}, true, this);
+  DialogUtils::GenericDialog dlg("Import Vault", {{"Import from: ", QLineEdit::Normal}}, true, this);
   if (dlg.exec() != QDialog::Accepted) return;
 
   QString path = dlg.inputText(0);
@@ -272,9 +285,10 @@ void MainWindow::addEntryToList(const PasswordEntry &entry) {
   QWidget         *rowWidget = new QWidget;
   auto            *rowLayout = new QHBoxLayout(rowWidget);
 
-  rowLayout->addWidget(new QLabel(entry.site));
-  rowLayout->addWidget(new QLabel(entry.username));
-  rowLayout->addWidget(new QLabel(QString(entry.password.length(), '*')));
+  rowLayout->addWidget(new QLabel(entry.site), 2);
+  rowLayout->addWidget(new QLabel(entry.username), 2);
+  rowLayout->addWidget(new QLabel(entry.email.isEmpty() ? "N/A" : entry.email), 2);
+  rowLayout->addWidget(new QLabel(QString(entry.password.length(), '*')), 2);
 
   auto *copyButton = new QPushButton("Copy");
   connect(copyButton, &QPushButton::clicked, this, [entry]() { Platform::WindowUtils::copyToClipboard(entry); });
@@ -286,9 +300,13 @@ void MainWindow::addEntryToList(const PasswordEntry &entry) {
   passwordList->setItemWidget(item, rowWidget);
 }
 
-void MainWindow::editPassword(PasswordEntry &entry) {
-  /*has to be called by editPasswordMenu,
-  unless it was called via the edit menu*/
+void MainWindow::editPassword(PasswordEntry &entry) { /*has to be called by editPasswordMenu*/ }
+
+bool MainWindow::isDuplicateEntry(const QString &site, const QString &username) const {
+  for (const PasswordEntry &entry : entries) {
+    if (entry.site == site && entry.username == username) return true;
+  }
+  return false;
 }
 
 void MainWindow::editPasswordMenu() {
