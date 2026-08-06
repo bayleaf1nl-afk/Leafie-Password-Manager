@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QPushButton>
 #include <QWidget>
+#include <qaction.h>
 #include <qcontainerfwd.h>
 #include <qtmetamacros.h>
 
@@ -44,6 +45,7 @@ private:
   QMenu                 *helpMenu;
   QAction               *newPasswordAct;
   QAction               *deletePasswordAct;
+  QAction               *deletePasswordNoConfirmAct;
   QAction               *editPasswordAct;
   QAction               *loginAct;
   QAction               *exportAct;
@@ -72,7 +74,7 @@ private:
 
 private slots:
   void NewPassword();
-  void RemovePassword();
+  void RemovePassword(bool forceDelete = false);
   void ExportVault();
   void ImportVault();
   void FilterPasswords(const QString &text);

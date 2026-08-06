@@ -60,6 +60,11 @@ void MainWindow::createActions() {
   deletePasswordAct->setShortcut(QKeySequence::Delete);
   connect(deletePasswordAct, &QAction::triggered, this, &MainWindow::RemovePassword);
 
+  deletePasswordNoConfirmAct = new QAction(this);
+  deletePasswordNoConfirmAct->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_Delete));
+  addAction(deletePasswordNoConfirmAct);
+  connect(deletePasswordNoConfirmAct, &QAction::triggered, this, [this] { RemovePassword(true); });
+
   editPasswordAct = new QAction("Edit Password", this);
   editPasswordAct->setShortcut(QKeySequence("Ctrl + E"));
   connect(editPasswordAct, &QAction::triggered, this, [this]() {
@@ -181,29 +186,35 @@ void MainWindow::NewPassword() {
     entry.username = dlg.inputText(1);
     entry.password = dlg.inputText(2);
     if (MainWindow::isDuplicateEntry(entry.site, entry.username)) {
+      int choice = DialogUtils::confirmationWindow(
+          "Confirmation", "There already exists an entry with the same site and username. Add anyway?");
+      if (choice == QMessageBox::Yes) {
+        entries.push_back(entry);
+        addEntryToList(entry);
+        SaveVault();
+      } else {
+        return;
+      }
     }
-
-    entries.push_back(entry);
-    addEntryToList(entry);
-    SaveVault();
   }
 }
 
-void MainWindow::RemovePassword() {
+void MainWindow::RemovePassword(bool forceDelete) {
   const int row = passwordList->currentRow();
   if (row < 0) {
     return;
   }
-  int choice =
-      DialogUtils::confirmationWindow(QString("Confirmation"), QString("Are you sure you want to delete this entry?"));
+  if (!forceDelete) {
+    int choice = DialogUtils::confirmationWindow(QString("Confirmation"),
+                                                 QString("Are you sure you want to delete this entry?"));
 
-  if (choice == QMessageBox::Yes) {
-    delete passwordList->takeItem(row);
-    entries.remove(row);
-    SaveVault();
-  } else {
-    return;
+    if (choice != QMessageBox::Yes) {
+      return;
+    }
   }
+  delete passwordList->takeItem(row);
+  entries.remove(row);
+  SaveVault();
 }
 void MainWindow::ExportVault() {
   DialogUtils::GenericDialog dlg("Export Vault", {{"Export to: ", QLineEdit::Normal}}, true, this);
