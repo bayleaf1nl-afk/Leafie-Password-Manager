@@ -1,6 +1,6 @@
 #include "LoginGate.h"
-#include "GenericDialog.h"
-#include "platform/WindowManager.h"
+#include "../platform/WindowManager.h"
+#include "../ui/GenericDialog.h"
 #include <QDebug>
 #include <QDialog>
 #include <QFile>

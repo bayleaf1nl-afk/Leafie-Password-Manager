@@ -1,9 +1,9 @@
 #include "MainWindow.h"
+#include "../core/LoginGate.h"
+#include "../platform/WindowManager.h"
+#include "../vault/PasswordEntry.h"
+#include "../vault/PasswordManager.h"
 #include "GenericDialog.h"
-#include "LoginGate.h"
-#include "PasswordEntry.h"
-#include "PasswordManager.h"
-#include "platform/WindowManager.h"
 //---------------------------//
 #include <QAction>
 #include <QApplication>
@@ -31,13 +31,16 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <Qt>
-#include <iostream>
 #include <qlogging.h>
+#include <qmenubar.h>
+#include <qmessagebox.h>
+#include <qnamespace.h>
 #include <qpicture.h>
 #include <qwindowdefs.h>
 
 MainWindow::MainWindow() {
   setWindowTitle("Leaf's Password Manager");
+  topMenu = new QMenuBar(this);
   createLayout();
   createActions();
   createMenus();
@@ -70,16 +73,14 @@ void MainWindow::createActions() {
 }
 
 void MainWindow::createMenus() {
-  createFileMenu();
   createEditMenu();
+  createFileMenu();
   createSettingsMenu();
   createHelpMenu();
-
-  setMenuBar(topMenu);
 }
 
 void MainWindow::createFileMenu() {
-  fileMenu = topMenu->addMenu("File");
+  fileMenu = menuBar()->addMenu("File");
 
   fileMenu->addAction(exportAct);
   fileMenu->addAction(importAct);
@@ -88,17 +89,17 @@ void MainWindow::createFileMenu() {
 }
 
 void MainWindow::createEditMenu() {
-  editMenu = topMenu->addMenu("Edit");
+  editMenu = menuBar()->addMenu("Edit");
 
   editMenu->addAction(newPasswordAct);
   editMenu->addAction(deletePasswordAct);
   editMenu->addAction(editPasswordAct);
 }
 
-void MainWindow::createSettingsMenu() { settingsMenu = topMenu->addMenu("Settings"); }
+void MainWindow::createSettingsMenu() { settingsMenu = menuBar()->addMenu("Settings"); }
 
 void MainWindow::createHelpMenu() {
-  helpMenu = topMenu->addMenu("Help");
+  helpMenu = menuBar()->addMenu("Help");
 
   helpMenu->addAction("About", this, &MainWindow::showAboutDialog);
 }
@@ -126,8 +127,6 @@ QWidget *MainWindow::createLeftPanel() {
 
   addButton    = new QPushButton("Add", leftWidget);
   delButton    = new QPushButton("Delete", leftWidget);
-  importButton = new QPushButton("Load", leftWidget);
-  exportButton = new QPushButton("Save & Export", leftWidget);
   passwordList = new QListWidget(leftWidget);
   searchBox    = new QLineEdit(leftWidget);
 
@@ -135,11 +134,11 @@ QWidget *MainWindow::createLeftPanel() {
   layout->addWidget(passwordList);
   layout->addWidget(searchBox);
   layout->addWidget(bottomFiller);
+  layout->addWidget(addButton);
+  layout->addWidget(delButton);
 
   connect(addButton, &QPushButton::clicked, this, &MainWindow::NewPassword);
   connect(delButton, &QPushButton::clicked, this, &MainWindow::RemovePassword);
-  connect(exportButton, &QPushButton::clicked, this, &MainWindow::ExportVault);
-  connect(importButton, &QPushButton::clicked, this, &MainWindow::ImportVault);
   connect(searchBox, &QLineEdit::textChanged, this, &MainWindow::FilterPasswords);
 
   return leftWidget;
@@ -177,9 +176,21 @@ void MainWindow::RemovePassword() {
   if (row < 0) {
     return;
   }
-  delete passwordList->takeItem(row);
-  entries.remove(row);
-  SaveVault();
+  auto msgBox = QMessageBox();
+  msgBox.setWindowTitle("Confirmation");
+  msgBox.setText("Are you sure you want to remove this entry?");
+  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+  msgBox.setDefaultButton(QMessageBox::No);
+  msgBox.setIcon(QMessageBox::NoIcon);
+  int choice = msgBox.exec();
+
+  if (choice == QMessageBox::Yes) {
+    delete passwordList->takeItem(row);
+    entries.remove(row);
+    SaveVault();
+  } else {
+    return;
+  }
 }
 void MainWindow::ExportVault() {
   GenericDialog dlg("Export Vault", {{"Export to: ", QLineEdit::Normal}}, true, this);
@@ -227,6 +238,7 @@ void MainWindow::SaveVault() {
     file.write(doc.toJson());
   }
 }
+
 void MainWindow::LoadVault() {
   QFile file("vault.json");
   if (!file.open(QIODevice::ReadOnly)) {

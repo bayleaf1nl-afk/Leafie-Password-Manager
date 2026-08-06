@@ -1,4 +1,4 @@
-#include "../PasswordEntry.h"
+#include "../vault/PasswordEntry.h"
 #include "WindowManager.h"
 #include <QApplication>
 #include <QClipboard>

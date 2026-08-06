@@ -1,5 +1,5 @@
 #pragma once
-#include "PasswordEntry.h"
+#include "../vault/PasswordEntry.h"
 #include <QAction>
 #include <QBoxLayout>
 #include <QDialog>
@@ -35,8 +35,6 @@ private:
   QDialogButtonBox      *genericButtonBox;
   QPushButton           *addButton;
   QPushButton           *delButton;
-  QPushButton           *exportButton;
-  QPushButton           *importButton;
   QListWidget           *passwordList;
   QLineEdit             *searchBox;
   QMenuBar              *topMenu;

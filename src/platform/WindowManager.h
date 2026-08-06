@@ -1,5 +1,5 @@
 #pragma once
-#include "../PasswordEntry.h"
+#include "../vault/PasswordEntry.h"
 #include <QWidget>
 namespace Platform {
 void attemptFloating(QWidget *window);
