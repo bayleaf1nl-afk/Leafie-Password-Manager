@@ -274,9 +274,14 @@ void MainWindow::addEntryToList(const PasswordEntry &entry) {
   passwordList->setItemWidget(item, rowWidget);
 }
 
-void MainWindow::editPassword(PasswordEntry &entry) { editPasswordMenu(); }
+void MainWindow::editPassword(PasswordEntry &entry) {
+  /*has to be called by editPasswordMenu,
+  unless it was called via the edit menu*/
+}
 
 void MainWindow::editPasswordMenu() {
   auto *passMenu = new QWidget;
   passMenu->hide();
+
+  // todo: stub, make this work
 }
