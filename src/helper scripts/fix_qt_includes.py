@@ -2,7 +2,12 @@ import re
 import sys
 from pathlib import Path
 
-"""usage: python3 fix_qt_includes.py <directory>. it is recursive."""
+"""recursively replaces legacy Qt #include <qfoo.h> headers with their
+modern camelcase equivalents and removes duplicate #include directives.
+
+usage:
+    python3 fix_qt_includes.py <directory>
+"""
 
 
 QT_HEADER_MAP = {
@@ -196,7 +201,8 @@ QT_HEADER_MAP = {
 
 MATCHES = re.compile(r"""#include\s*<([a-z0-9_]+)\.h>""")
 ANY_INCLUDE = re.compile(r"""^\s*#include\s*[<"].+[>"]\s*$""")
-
+# matches any #include directive so duplicate includes can be removed,
+# regardless of whether they use <> or "".
 
 def fix_file(path: Path) -> bool:
     text = path.read_text(encoding='utf-8')
@@ -223,7 +229,6 @@ def fix_file(path: Path) -> bool:
 
     return changed
 
-
 def dedup_file(path: Path) -> bool:
     lines = path.read_text(encoding='utf-8').splitlines(keepends=True)
     seen = set()
@@ -232,6 +237,8 @@ def dedup_file(path: Path) -> bool:
 
     for line in lines:
         stripped = line.strip()
+        # deduplicate identical include directives while preserving the
+        # first occurrence and the order of the remaining lines
         if ANY_INCLUDE.match(stripped):
             if stripped in seen:
                 changed = True
