@@ -1,6 +1,8 @@
 #include "DialogUtils.h"
 #include <QMessageBox>
 
+namespace DialogUtils {
+
 int confirmationWindow(const QString &title, const QString &text) {
   auto msgBox = QMessageBox();
   msgBox.setWindowTitle(title);
@@ -11,3 +13,5 @@ int confirmationWindow(const QString &title, const QString &text) {
   int choice = msgBox.exec();
   return choice;
 }
+
+} // namespace DialogUtils
