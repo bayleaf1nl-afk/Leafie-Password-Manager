@@ -17,7 +17,12 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <iostream>
+#include <print>
+#include <qdebug.h>
 #include <qtmetamacros.h>
+#include <sodium.h>
+#include <sodium/core.h>
 
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
@@ -41,5 +46,12 @@ int main(int argc, char *argv[]) {
   window.resize(800, 600);
   window.show();
   Platform::WindowUtils::centerWindow(&window);
+
+  if (sodium_init() < 0) {
+    qDebug() << "libsodium failed to init\n";
+  } else {
+    qDebug() << "libsodium is alive\n";
+  }
+
   return app.exec();
 }

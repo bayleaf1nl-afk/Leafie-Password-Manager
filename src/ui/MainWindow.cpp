@@ -34,6 +34,7 @@
 #include <QWidget>
 #include <Qt>
 #include <cstddef>
+#include <iostream>
 #include <qabstractitemview.h>
 #include <qboxlayout.h>
 #include <qcontainerfwd.h>
@@ -54,14 +55,20 @@
 #include <qwidget.h>
 #include <qwindowdefs.h>
 
-MainWindow::MainWindow() {
+PasswordManager passwordManager{""};
+
+MainWindow::MainWindow() : passwordManager("") {
   setWindowTitle("Leaf's Password Manager");
   topMenu = new QMenuBar(this);
 
   createLayout();
   createActions();
   createMenus();
-  LoadVault();
+
+  passwordManager.LoadVault();
+  for (const auto &entry : passwordManager.entries()) {
+    addEntryToList(entry);
+  }
 }
 
 void MainWindow::createActions() {

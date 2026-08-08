@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>styles.qss</file>
+        <file>fonts/MonaspaceArgonNF-Medium.otf</file>
     </qresource>
 </RCC>

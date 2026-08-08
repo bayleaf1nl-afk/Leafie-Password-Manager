@@ -1,5 +1,6 @@
 #pragma once
 #include "../vault/PasswordEntry.h"
+#include "../vault/PasswordManager.h"
 #include <QAction>
 #include <QBoxLayout>
 #include <QDialog>
@@ -33,6 +34,8 @@ private:
   QLineEdit *website;
   QLineEdit *username;
   QLineEdit *password;
+
+  PasswordManager passwordManager;
 
   int                    editingRow   = -1;
   PasswordEntry         *editingEntry = nullptr;
