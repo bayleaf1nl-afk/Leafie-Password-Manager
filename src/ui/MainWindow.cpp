@@ -15,6 +15,7 @@
 #include <QDialog>
 #include <QFile>
 #include <QFileDevice>
+#include <QFontDatabase>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QKeySequence>
@@ -32,19 +33,28 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <Qt>
+#include <cstddef>
+#include <qabstractitemview.h>
+#include <qboxlayout.h>
 #include <qcontainerfwd.h>
 #include <qhashfunctions.h>
 #include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
 #include <qlogging.h>
 #include <qmenubar.h>
 #include <qmessagebox.h>
 #include <qnamespace.h>
 #include <qpicture.h>
+#include <qpushbutton.h>
+#include <qsize.h>
+#include <qsizepolicy.h>
 #include <qwindowdefs.h>
 
 MainWindow::MainWindow() {
   setWindowTitle("Leaf's Password Manager");
   topMenu = new QMenuBar(this);
+
   createLayout();
   createActions();
   createMenus();
@@ -67,12 +77,7 @@ void MainWindow::createActions() {
 
   editPasswordAct = new QAction("Edit Password", this);
   editPasswordAct->setShortcut(QKeySequence("Ctrl + E"));
-  connect(editPasswordAct, &QAction::triggered, this, [this]() {
-    const int row = passwordList->currentRow();
-    if (row < 0) return; // fuck you
-
-    editPassword(entries[row]);
-  });
+  connect(editPasswordAct, &QAction::triggered, this, &MainWindow::editPasswordMenu);
 
   exportAct = new QAction("Export", this);
   connect(exportAct, &QAction::triggered, this, &MainWindow::ExportVault);
@@ -82,6 +87,7 @@ void MainWindow::createActions() {
 }
 
 void MainWindow::createMenus() {
+  QFontDatabase::addApplicationFont(":/fonts/MonaspaceArgonNF-Medium.otf");
   createEditMenu();
   createFileMenu();
   createSettingsMenu();
@@ -121,11 +127,16 @@ void MainWindow::createLayout() {
   auto *central = new QWidget;
   setCentralWidget(central);
   auto *mainLayout = new QHBoxLayout(central);
+  infoLabel        = new QLabel("test");
   mainLayout->addWidget(infoLabel);
 
   mainLayout->addWidget(createLeftPanel());
   mainLayout->addWidget(createRightPanel());
 }
+
+//!!todo: panel creation and general UI might want to be moved in their separate folder, depending on how big it gets.
+// ideally we'd want a header and cpp file purely to construct the MainWindow UI. its not really annoying as much
+// as its a pita to do ctrl F all the time
 
 QWidget *MainWindow::createLeftPanel() {
 
@@ -145,17 +156,23 @@ QWidget *MainWindow::createLeftPanel() {
   layout->addWidget(header);
   bottomFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-  addButton    = new QPushButton("Add", leftWidget);
-  delButton    = new QPushButton("Delete", leftWidget);
+  auto *buttonLayout = new QHBoxLayout;
+  addButton          = new QPushButton("Add", leftWidget);
+  addButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+  delButton = new QPushButton("Delete", leftWidget);
+  delButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+  searchBox = new QLineEdit(leftWidget);
+
+  buttonLayout->addWidget(searchBox, 3);
+  buttonLayout->addWidget(addButton, 1);
+  buttonLayout->addWidget(delButton, 1);
   passwordList = new QListWidget(leftWidget);
-  searchBox    = new QLineEdit(leftWidget);
+  passwordList->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
   layout->setContentsMargins(5, 5, 5, 5);
   layout->addWidget(passwordList);
-  layout->addWidget(searchBox);
   layout->addWidget(bottomFiller);
-  layout->addWidget(addButton);
-  layout->addWidget(delButton);
+  layout->addLayout(buttonLayout);
 
   connect(addButton, &QPushButton::clicked, this, &MainWindow::NewPassword);
   connect(delButton, &QPushButton::clicked, this, &MainWindow::RemovePassword);
@@ -165,10 +182,55 @@ QWidget *MainWindow::createLeftPanel() {
 }
 
 QWidget *MainWindow::createRightPanel() {
-  auto *rightWidget = new QWidget;
-  auto  leftLayout  = new QVBoxLayout;
+  rightWidget       = new QWidget;
+  auto *rightLayout = new QVBoxLayout(rightWidget);
 
-  // todo; edit panel will live here most likely
+  rightWidget->setObjectName("editPanel");
+  rightLayout->setContentsMargins(18, 18, 18, 18);
+  rightLayout->setSpacing(8);
+
+  siteEdit     = new QLineEdit;
+  usernameEdit = new QLineEdit;
+  emailEdit    = new QLineEdit;
+  passwordEdit = new QLineEdit;
+  passwordEdit->setEchoMode(QLineEdit::Password);
+
+  rightLayout->addWidget(new QLabel("Site"));
+  rightLayout->addWidget(siteEdit);
+
+  rightLayout->addSpacing(12);
+
+  rightLayout->addWidget(new QLabel("Username"));
+  rightLayout->addWidget(usernameEdit);
+
+  rightLayout->addSpacing(12);
+
+  rightLayout->addWidget(new QLabel("Email"));
+  rightLayout->addWidget(emailEdit);
+
+  rightLayout->addSpacing(12);
+
+  rightLayout->addWidget(new QLabel("Password"));
+  rightLayout->addWidget(passwordEdit);
+
+  rightLayout->addSpacing(12);
+
+  auto *buttonLayout = new QHBoxLayout;
+  auto *saveButton   = new QPushButton("Save");
+  buttonLayout->addWidget(saveButton);
+  auto *clearButton = new QPushButton("Clear");
+  buttonLayout->addWidget(clearButton);
+  auto *resetButton = new QPushButton("Reset");
+  buttonLayout->addWidget(resetButton);
+
+  rightLayout->addLayout(buttonLayout);
+
+  connect(saveButton, &QPushButton::clicked, this, &MainWindow::editPassword);
+  connect(clearButton, &QPushButton::clicked, this, &MainWindow::clearEditPasswordFields);
+  connect(resetButton, &QPushButton::clicked, this, &MainWindow::resetEditPasswordFields);
+
+  rightLayout->addStretch();
+
   return rightWidget;
 }
 
@@ -176,27 +238,29 @@ void MainWindow::NewPassword() {
   QVector<DialogField> fields = {
       {"Site: ", QLineEdit::Normal},
       {"Username: ", QLineEdit::Normal},
+      {"Email: ", QLineEdit::Normal},
       {"Password: ", QLineEdit::Password},
   };
 
   DialogUtils::GenericDialog dlg("New Password", fields, false, this);
-  if (dlg.exec() == QDialog::Accepted) {
-    PasswordEntry entry;
-    entry.site     = dlg.inputText(0);
-    entry.username = dlg.inputText(1);
-    entry.password = dlg.inputText(2);
-    if (MainWindow::isDuplicateEntry(entry.site, entry.username)) {
-      int choice = DialogUtils::confirmationWindow(
-          "Confirmation", "There already exists an entry with the same site and username. Add anyway?");
-      if (choice == QMessageBox::Yes) {
-        entries.push_back(entry);
-        addEntryToList(entry);
-        SaveVault();
-      } else {
-        return;
-      }
+  if (dlg.exec() != QDialog::Accepted) return;
+
+  PasswordEntry entry;
+  entry.site     = dlg.inputText(0);
+  entry.username = dlg.inputText(1);
+  entry.email    = dlg.inputText(2);
+  entry.password = dlg.inputText(3);
+
+  if (MainWindow::isDuplicateEntry(entry.site, entry.username)) {
+    int choice = DialogUtils::confirmationWindow(
+        "Confirmation", "There already exists an entry with the same site and username. Add anyway?");
+    if (choice != QMessageBox::Yes) {
+      return;
     }
   }
+  entries.push_back(entry);
+  addEntryToList(entry);
+  SaveVault();
 }
 
 void MainWindow::RemovePassword(bool forceDelete) {
@@ -311,7 +375,21 @@ void MainWindow::addEntryToList(const PasswordEntry &entry) {
   passwordList->setItemWidget(item, rowWidget);
 }
 
-void MainWindow::editPassword(PasswordEntry &entry) { /*has to be called by editPasswordMenu*/ }
+void MainWindow::editPassword() {
+  if (editingRow < 0 || editingRow >= entries.size()) {
+    return;
+  }
+
+  PasswordEntry &entry = entries[editingRow];
+
+  entry.site     = siteEdit->text();
+  entry.username = usernameEdit->text();
+  entry.email    = emailEdit->text();
+  entry.password = passwordEdit->text();
+
+  SaveVault();
+  closeEditMenu();
+}
 
 bool MainWindow::isDuplicateEntry(const QString &site, const QString &username) const {
   for (const PasswordEntry &entry : entries) {
@@ -321,8 +399,41 @@ bool MainWindow::isDuplicateEntry(const QString &site, const QString &username) 
 }
 
 void MainWindow::editPasswordMenu() {
-  auto *passMenu = new QWidget;
-  passMenu->hide();
+  const int row = passwordList->currentRow();
+  if (row < 0) return;
 
-  // todo: stub, make this work
+  editingRow = row;
+
+  siteEdit->setText(entries[row].site);
+  usernameEdit->setText(entries[row].username);
+  emailEdit->setText(entries[row].email);
+  passwordEdit->setText(entries[row].password);
+
+  rightWidget->show();
+}
+
+void MainWindow::clearEditPasswordFields() {
+  siteEdit->clear();
+  usernameEdit->clear();
+  emailEdit->clear();
+  passwordEdit->clear();
+}
+
+void MainWindow::resetEditPasswordFields() {
+  if (editingRow < 0 || editingRow >= entries.size()) {
+    return;
+  }
+
+  const PasswordEntry &entry = entries[editingRow];
+
+  siteEdit->setText(entry.site);
+  usernameEdit->setText(entry.username);
+  emailEdit->setText(entry.email);
+  passwordEdit->setText(entry.password);
+}
+
+void MainWindow::closeEditMenu() {
+  clearEditPasswordFields();
+  editingRow = -1;
+  rightWidget->hide();
 }

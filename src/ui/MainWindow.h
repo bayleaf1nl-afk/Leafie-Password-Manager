@@ -13,7 +13,9 @@
 #include <QWidget>
 #include <qaction.h>
 #include <qcontainerfwd.h>
+#include <qlineedit.h>
 #include <qtmetamacros.h>
+#include <qwidget.h>
 
 namespace Utilities {
 QString generatePassword();
@@ -32,6 +34,12 @@ private:
   QLineEdit *username;
   QLineEdit *password;
 
+  int                    editingRow   = -1;
+  PasswordEntry         *editingEntry = nullptr;
+  QLineEdit             *passwordEdit = nullptr;
+  QLineEdit             *emailEdit    = nullptr;
+  QLineEdit             *usernameEdit = nullptr;
+  QLineEdit             *siteEdit     = nullptr;
   QLineEdit             *genericInput;
   QDialogButtonBox      *genericButtonBox;
   QPushButton           *addButton;
@@ -52,7 +60,8 @@ private:
   QAction               *importAct;
   QLabel                *infoLabel;
   QVector<PasswordEntry> entries;
-
+  QWidget               *rightWidget;
+  QWidget               *windowWrapper;
   //------------//
 
   void     createActions();
@@ -62,15 +71,16 @@ private:
   void     SaveVault();
   void     LoadVault();
   void     addEntryToList(const PasswordEntry &entry);
-  void     editPassword(PasswordEntry &entry);
   bool     isDuplicateEntry(const QString &site, const QString &username) const;
   void     editPasswordMenu();
   void     createFileMenu();
   void     createEditMenu();
+  void     closeEditMenu();
   void     createSettingsMenu();
   void     createHelpMenu();
   QWidget *createLeftPanel();
   QWidget *createRightPanel();
+  void     setupFramelessWindow();
 
 private slots:
   void NewPassword();
@@ -78,4 +88,7 @@ private slots:
   void ExportVault();
   void ImportVault();
   void FilterPasswords(const QString &text);
+  void clearEditPasswordFields();
+  void resetEditPasswordFields();
+  void editPassword();
 };
