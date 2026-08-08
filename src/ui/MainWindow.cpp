@@ -55,8 +55,6 @@
 #include <qwidget.h>
 #include <qwindowdefs.h>
 
-PasswordManager passwordManager{""};
-
 MainWindow::MainWindow() : passwordManager("") {
   setWindowTitle("Leaf's Password Manager");
   topMenu = new QMenuBar(this);
@@ -263,16 +261,17 @@ void MainWindow::NewPassword() {
   entry.email    = dlg.inputText(2);
   entry.password = dlg.inputText(3);
 
-  if (MainWindow::isDuplicateEntry(entry.site, entry.username)) {
+  if (passwordManager.isDuplicateEntry(entry.site, entry.username)) {
     int choice = DialogUtils::confirmationWindow(
         "Confirmation", "There already exists an entry with the same site and username. Add anyway?");
     if (choice != QMessageBox::Yes) {
       return;
     }
   }
-  entries.push_back(entry);
+  if (!passwordManager.addEntry(entry)) {
+    return;
+  }
   addEntryToList(entry);
-  SaveVault();
 }
 
 void MainWindow::RemovePassword(bool forceDelete) {
@@ -288,81 +287,31 @@ void MainWindow::RemovePassword(bool forceDelete) {
       return;
     }
   }
+  if (!passwordManager.removeEntry(row)) return;
   delete passwordList->takeItem(row);
-  entries.remove(row);
-  SaveVault();
 }
 void MainWindow::ExportVault() {
   DialogUtils::GenericDialog dlg("Export Vault", {{"Export to: ", QLineEdit::Normal}}, true, this);
   if (dlg.exec() != QDialog::Accepted) return;
 
-  QString path = dlg.inputText(0);
-
-  QJsonArray array;
-  for (const auto &entry : entries) {
-    array.append(entry.toJson());
-  }
-  QJsonDocument doc(array);
-
-  QFile file(path);
-  if (file.open(QIODevice::WriteOnly)) {
-    file.write(doc.toJson());
-  }
+  passwordManager.exportVault(dlg.inputText(0));
 }
 void MainWindow::ImportVault() {
   DialogUtils::GenericDialog dlg("Import Vault", {{"Import from: ", QLineEdit::Normal}}, true, this);
   if (dlg.exec() != QDialog::Accepted) return;
 
-  QString path = dlg.inputText(0);
-  QFile   file(path);
-  if (!file.open(QIODevice::ReadOnly)) return;
-  QJsonDocument doc   = QJsonDocument::fromJson(file.readAll());
-  QJsonArray    array = doc.array();
+  if (!passwordManager.importVault(dlg.inputText(0))) return;
 
-  for (const auto &var : array) {
-    PasswordEntry entry = PasswordEntry::fromJson(var.toObject());
-    entries.push_back(entry);
+  passwordList->clear();
+
+  for (const auto &entry : passwordManager.entries())
     addEntryToList(entry);
-  }
-  SaveVault();
-}
-void MainWindow::SaveVault() {
-  QJsonArray array;
-  for (const auto &entry : entries) {
-    array.append(entry.toJson());
-  }
-  QJsonDocument doc(array);
-
-  QFile file("vault.json");
-  if (file.open(QIODevice::WriteOnly)) {
-    file.write(doc.toJson());
-  }
-}
-
-void MainWindow::LoadVault() {
-  QFile file("vault.json");
-  if (!file.open(QIODevice::ReadOnly)) {
-    qWarning() << "Could not open file: ";
-    return;
-  };
-  QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-  if (doc.isNull()) {
-    qWarning() << "Vault file is corrupted or not valid JSON";
-    return;
-  }
-  QJsonArray array = doc.array();
-
-  for (const auto &val : array) {
-    PasswordEntry entry = PasswordEntry::fromJson(val.toObject());
-    entries.push_back(entry);
-    addEntryToList(entry);
-  }
 }
 
 void MainWindow::FilterPasswords(const QString &text) {
   for (int i = 0; i < passwordList->count(); ++i) {
     QListWidgetItem *item    = passwordList->item(i);
-    bool             matches = entries[i].site.contains(text, Qt::CaseInsensitive);
+    bool             matches = passwordManager.entries()[i].site.contains(text, Qt::CaseInsensitive);
     passwordList->item(i)->setHidden(!matches);
   }
 }
@@ -381,7 +330,7 @@ void MainWindow::addEntryToList(const PasswordEntry &entry) {
 
   auto *copyButton = new QPushButton("Copy");
   connect(copyButton, &QPushButton::clicked, this,
-          [this, row]() { Platform::WindowUtils::copyToClipboard(entries[row]); });
+          [this, row]() { Platform::WindowUtils::copyToClipboard(passwordManager.entries()[row]); });
   rowLayout->addWidget(copyButton);
 
   rowLayout->setContentsMargins(4, 2, 4, 2);
@@ -396,7 +345,7 @@ void MainWindow::refreshPasswordEntry(int row) {
   QWidget         *rowWidget = passwordList->itemWidget(item);
   if (!rowWidget) return;
 
-  const PasswordEntry &entry     = entries[row];
+  const PasswordEntry &entry     = passwordManager.entries()[row];
   QHBoxLayout         *rowLayout = qobject_cast<QHBoxLayout *>(rowWidget->layout());
   if (!rowLayout) return;
 
@@ -407,27 +356,20 @@ void MainWindow::refreshPasswordEntry(int row) {
 }
 
 void MainWindow::editPassword() {
-  if (editingRow < 0 || editingRow >= entries.size()) {
+  if (editingRow < 0 || editingRow >= passwordManager.entries().size()) {
     return;
   }
 
-  PasswordEntry &entry = entries[editingRow];
+  PasswordEntry entry;
 
   entry.site     = siteEdit->text();
   entry.username = usernameEdit->text();
   entry.email    = emailEdit->text();
   entry.password = passwordEdit->text();
 
-  SaveVault();
+  if (!passwordManager.updateEntry(editingRow, entry)) return;
   refreshPasswordEntry(editingRow);
   closeEditMenu();
-}
-
-bool MainWindow::isDuplicateEntry(const QString &site, const QString &username) const {
-  for (const PasswordEntry &entry : entries) {
-    if (entry.site == site && entry.username == username) return true;
-  }
-  return false;
 }
 
 void MainWindow::editPasswordMenu() {
@@ -436,10 +378,10 @@ void MainWindow::editPasswordMenu() {
 
   editingRow = row;
 
-  siteEdit->setText(entries[row].site);
-  usernameEdit->setText(entries[row].username);
-  emailEdit->setText(entries[row].email);
-  passwordEdit->setText(entries[row].password);
+  siteEdit->setText(passwordManager.entries()[row].site);
+  usernameEdit->setText(passwordManager.entries()[row].username);
+  emailEdit->setText(passwordManager.entries()[row].email);
+  passwordEdit->setText(passwordManager.entries()[row].password);
 
   rightWidget->show();
 }
@@ -452,11 +394,11 @@ void MainWindow::clearEditPasswordFields() {
 }
 
 void MainWindow::resetEditPasswordFields() {
-  if (editingRow < 0 || editingRow >= entries.size()) {
+  if (editingRow < 0 || editingRow >= passwordManager.entries().size()) {
     return;
   }
 
-  const PasswordEntry &entry = entries[editingRow];
+  const PasswordEntry &entry = passwordManager.entries()[editingRow];
 
   siteEdit->setText(entry.site);
   usernameEdit->setText(entry.username);

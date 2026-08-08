@@ -20,7 +20,7 @@ public:
   bool isDuplicateEntry(const QString &site, const QString &username) const;
   bool SaveVault();
   bool LoadVault();
-  bool ExportVault(const QString &path) const;
+  bool exportVault(const QString &path) const;
   bool importVault(const QString &path);
   void deriveKey();
   void encrypt();

@@ -14,7 +14,7 @@ PasswordManager::PasswordManager(const QString &masterPassword) { m_masterPasswo
 
 const QVector<PasswordEntry> &PasswordManager::entries() const { return m_entries; }
 
-bool PasswordManager::isValidIndex(int index) { return index > 0 && index < m_entries.size(); }
+bool PasswordManager::isValidIndex(int index) { return index >= 0 && index < m_entries.size(); }
 
 bool PasswordManager::isDuplicateEntry(const QString &site, const QString &username) const {
   for (const PasswordEntry &entry : m_entries) {
@@ -75,3 +75,40 @@ bool PasswordManager::LoadVault() {
   }
   return true;
 }
+
+bool PasswordManager::exportVault(const QString &path) const {
+  QJsonArray array;
+
+  for (const auto &entry : m_entries)
+    array.append(entry.toJson());
+
+  QJsonDocument doc(array);
+
+  QFile file(path);
+
+  if (!file.open(QIODevice::WriteOnly)) return false;
+
+  return file.write(doc.toJson()) != -1;
+}
+
+bool PasswordManager::importVault(const QString &path) {
+  QFile file(path);
+
+  if (!file.open(QIODevice::ReadOnly)) return false;
+
+  QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+
+  if (doc.isNull() || !doc.isArray()) return false;
+
+  const QJsonArray array = doc.array();
+
+  for (const auto &value : array) {
+    if (!value.isObject()) continue;
+
+    m_entries.push_back(PasswordEntry::fromJson(value.toObject()));
+  }
+
+  return SaveVault();
+}
+
+boll
