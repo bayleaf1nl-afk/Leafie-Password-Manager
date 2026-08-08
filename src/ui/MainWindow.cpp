@@ -41,14 +41,17 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qlistwidget.h>
 #include <qlogging.h>
 #include <qmenubar.h>
 #include <qmessagebox.h>
 #include <qnamespace.h>
+#include <qobject.h>
 #include <qpicture.h>
 #include <qpushbutton.h>
 #include <qsize.h>
 #include <qsizepolicy.h>
+#include <qwidget.h>
 #include <qwindowdefs.h>
 
 MainWindow::MainWindow() {
@@ -127,8 +130,6 @@ void MainWindow::createLayout() {
   auto *central = new QWidget;
   setCentralWidget(central);
   auto *mainLayout = new QHBoxLayout(central);
-  infoLabel        = new QLabel("test");
-  mainLayout->addWidget(infoLabel);
 
   mainLayout->addWidget(createLeftPanel());
   mainLayout->addWidget(createRightPanel());
@@ -222,15 +223,19 @@ QWidget *MainWindow::createRightPanel() {
   buttonLayout->addWidget(clearButton);
   auto *resetButton = new QPushButton("Reset");
   buttonLayout->addWidget(resetButton);
+  auto *cancelButton = new QPushButton("Cancel");
+  buttonLayout->addWidget(cancelButton);
 
   rightLayout->addLayout(buttonLayout);
 
   connect(saveButton, &QPushButton::clicked, this, &MainWindow::editPassword);
   connect(clearButton, &QPushButton::clicked, this, &MainWindow::clearEditPasswordFields);
   connect(resetButton, &QPushButton::clicked, this, &MainWindow::resetEditPasswordFields);
+  connect(cancelButton, &QPushButton::clicked, this, &MainWindow::closeEditMenu);
 
   rightLayout->addStretch();
 
+  rightWidget->hide();
   return rightWidget;
 }
 
@@ -356,6 +361,8 @@ void MainWindow::FilterPasswords(const QString &text) {
 }
 
 void MainWindow::addEntryToList(const PasswordEntry &entry) {
+  const int row = passwordList->count();
+
   QListWidgetItem *item      = new QListWidgetItem(passwordList);
   QWidget         *rowWidget = new QWidget;
   auto            *rowLayout = new QHBoxLayout(rowWidget);
@@ -366,13 +373,30 @@ void MainWindow::addEntryToList(const PasswordEntry &entry) {
   rowLayout->addWidget(new QLabel(QString(entry.password.length(), '*')), 2);
 
   auto *copyButton = new QPushButton("Copy");
-  connect(copyButton, &QPushButton::clicked, this, [entry]() { Platform::WindowUtils::copyToClipboard(entry); });
+  connect(copyButton, &QPushButton::clicked, this,
+          [this, row]() { Platform::WindowUtils::copyToClipboard(entries[row]); });
   rowLayout->addWidget(copyButton);
 
   rowLayout->setContentsMargins(4, 2, 4, 2);
   item->setSizeHint(rowWidget->sizeHint() + QSize(40, 20));
-  passwordList->addItem(item);
   passwordList->setItemWidget(item, rowWidget);
+}
+
+void MainWindow::refreshPasswordEntry(int row) {
+  if (row < 0 || row >= passwordList->count()) return;
+
+  QListWidgetItem *item      = passwordList->item(row);
+  QWidget         *rowWidget = passwordList->itemWidget(item);
+  if (!rowWidget) return;
+
+  const PasswordEntry &entry     = entries[row];
+  QHBoxLayout         *rowLayout = qobject_cast<QHBoxLayout *>(rowWidget->layout());
+  if (!rowLayout) return;
+
+  static_cast<QLabel *>(rowLayout->itemAt(0)->widget())->setText(entry.site);
+  static_cast<QLabel *>(rowLayout->itemAt(1)->widget())->setText(entry.username);
+  static_cast<QLabel *>(rowLayout->itemAt(2)->widget())->setText(entry.email.isEmpty() ? "N/A" : entry.email);
+  static_cast<QLabel *>(rowLayout->itemAt(3)->widget())->setText(QString(entry.password.length(), '*'));
 }
 
 void MainWindow::editPassword() {
@@ -388,6 +412,7 @@ void MainWindow::editPassword() {
   entry.password = passwordEdit->text();
 
   SaveVault();
+  refreshPasswordEntry(editingRow);
   closeEditMenu();
 }
 

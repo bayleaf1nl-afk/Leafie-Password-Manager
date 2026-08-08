@@ -81,6 +81,7 @@ private:
   QWidget *createLeftPanel();
   QWidget *createRightPanel();
   void     setupFramelessWindow();
+  void     refreshPasswordEntry(int row);
 
 private slots:
   void NewPassword();
