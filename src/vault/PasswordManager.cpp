@@ -1,17 +1,26 @@
 #include "PasswordManager.h"
 #include "PasswordEntry.h"
+#include <cstring>
 #include <iostream>
+#include <qassert.h>
 #include <qdir.h>
 #include <qevent.h>
 #include <qjsonarray.h>
 #include <qjsondocument.h>
 #include <qjsonobject.h>
+#include <qlogging.h>
 #include <qobject.h>
 #include <qstringview.h>
+#include <qtextdocument.h>
+#include <sodium/crypto_box.h>
+#include <sodium/crypto_pwhash.h>
+#include <sodium/crypto_secretbox.h>
+#include <sodium/randombytes.h>
+#include <sodium/utils.h>
 #include <string>
 
 PasswordManager::PasswordManager(const QString &masterPassword) { m_masterPassword = masterPassword; }
-
+PasswordManager::~PasswordManager() { sodium_memzero(m_key, sizeof m_key); }
 const QVector<PasswordEntry> &PasswordManager::entries() const { return m_entries; }
 
 bool PasswordManager::isValidIndex(int index) { return index >= 0 && index < m_entries.size(); }
@@ -44,17 +53,9 @@ bool PasswordManager::addEntry(const PasswordEntry &entry) {
 }
 
 bool PasswordManager::SaveVault() {
-  QJsonArray array;
-
-  for (const auto &entry : m_entries) {
-    array.append(entry.toJson());
-  }
-
-  QJsonDocument doc(array);
-
   QFile file("vault.json");
   if (!file.open(QIODevice::WriteOnly)) return false;
-  return file.write(doc.toJson()) != -1;
+  return file.write(stringify()) != -1;
 }
 
 bool PasswordManager::LoadVault() {
@@ -77,18 +78,11 @@ bool PasswordManager::LoadVault() {
 }
 
 bool PasswordManager::exportVault(const QString &path) const {
-  QJsonArray array;
-
-  for (const auto &entry : m_entries)
-    array.append(entry.toJson());
-
-  QJsonDocument doc(array);
-
   QFile file(path);
 
   if (!file.open(QIODevice::WriteOnly)) return false;
 
-  return file.write(doc.toJson()) != -1;
+  return file.write(stringify()) != -1;
 }
 
 bool PasswordManager::importVault(const QString &path) {
@@ -111,4 +105,65 @@ bool PasswordManager::importVault(const QString &path) {
   return SaveVault();
 }
 
-boll
+//------------------------------------------------------------------------------//
+
+QByteArray PasswordManager::stringify() const {
+  QJsonArray array;
+
+  for (const auto &entry : m_entries) {
+    array.append(entry.toJson());
+  }
+
+  QJsonDocument doc(array);
+  return doc.toJson();
+}
+
+QByteArray PasswordManager::encrypt(const QByteArray &plaintext) {
+  unsigned char nonce[crypto_secretbox_NONCEBYTES];
+  randombytes_buf(nonce, sizeof nonce);
+
+  QByteArray ciphertext(crypto_secretbox_MACBYTES + plaintext.size(), 0);
+
+  if (crypto_secretbox_easy(reinterpret_cast<unsigned char *>(ciphertext.data()),
+                            reinterpret_cast<const unsigned char *>(plaintext.constData()), plaintext.size(), nonce,
+                            m_key) != 0) {
+    return QByteArray();
+  }
+  QByteArray result(reinterpret_cast<const char *>(nonce), sizeof nonce);
+  result.append(ciphertext); // the text will look something like [nonce{24}bytes][MACtag{16}bytes][ciphertext{x}bytes]
+  return result;
+}
+
+QByteArray PasswordManager::decrypt(const QByteArray &data) {
+  if (data.size() < crypto_secretbox_NONCEBYTES + crypto_secretbox_MACBYTES) {
+    return QByteArray(); // too short to possibly be valid.
+  }
+  QByteArray nonce      = data.mid(0, crypto_secretbox_NONCEBYTES);
+  QByteArray ciphertext = data.mid(crypto_secretbox_NONCEBYTES);
+  QByteArray plaintext(ciphertext.size() - crypto_secretbox_MACBYTES, 0);
+
+  if (crypto_secretbox_open_easy(reinterpret_cast<unsigned char *>(plaintext.data()),
+                                 reinterpret_cast<const unsigned char *>(ciphertext.constData()), ciphertext.size(),
+                                 reinterpret_cast<const unsigned char *>(nonce.constData()), m_key) != 0) {
+    return QByteArray();
+  }
+
+  return plaintext;
+}
+
+bool PasswordManager::deriveKey(const unsigned char *existingSalt = nullptr) {
+  if (existingSalt) {
+    memcpy(salt, existingSalt, sizeof salt); // copy it from pre-existing salt
+  } else {
+    randombytes_buf(salt, sizeof salt); // generate one otherwise; first login only
+  }
+
+  const std::string stdPass   = m_masterPassword.toStdString();
+  const char *const passInput = stdPass.c_str();
+
+  if (crypto_pwhash(m_key, sizeof(m_key), passInput, stdPass.size(), salt, crypto_pwhash_OPSLIMIT_INTERACTIVE,
+                    crypto_pwhash_MEMLIMIT_INTERACTIVE, crypto_pwhash_ALG_DEFAULT) != 0) {
+    return false; //! oom error. handle it some other way but for now just return false
+  }
+  return true;
+}
