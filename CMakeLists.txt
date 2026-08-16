@@ -2,11 +2,15 @@ cmake_minimum_required(VERSION 3.21)
 
 project(PasswordManager)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_DEBUG "-g -fsanitize=address,undefined")
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SODIUM REQUIRED libsodium)
+
+
 
 qt_standard_project_setup()
 
@@ -33,7 +37,10 @@ qt_add_executable(PasswordManager
     src/platform/WindowManager_standard.cpp
     src/platform/WindowManager_tiling.cpp
     src/platform/WindowUtils.cpp
+    src/vault/PasswordManager.cpp
     ${RESOURCES}
 )
 
 target_link_libraries(PasswordManager PRIVATE Qt6::Widgets)
+target_link_libraries(PasswordManager PRIVATE ${SODIUM_LIBRARIES})
+target_include_directories(PasswordManager PRIVATE ${SODIUM_INCLUDE_DIRS})
