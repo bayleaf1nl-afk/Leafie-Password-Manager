@@ -28,6 +28,7 @@ qt_add_executable(PasswordManager
     src/core/LoginGate.h
     src/platform/WindowManager.h
     src/ui/DialogUtils.h
+    src/core/FileUtils.h
 
     src/vault/PasswordEntry.cpp
     src/core/LoginGate.cpp
@@ -38,6 +39,7 @@ qt_add_executable(PasswordManager
     src/platform/WindowManager_tiling.cpp
     src/platform/WindowUtils.cpp
     src/vault/PasswordManager.cpp
+    src/core/FileUtils.cpp
     ${RESOURCES}
 )
 
