@@ -1,4 +1,5 @@
 #include "PasswordManager.h"
+#include "../core/FileUtils.h"
 #include "PasswordEntry.h"
 #include <QSaveFile>
 #include <cstring>
@@ -57,7 +58,7 @@ bool PasswordManager::SaveVault() {
   QByteArray encrypted = encrypt(plaintext);
   if (encrypted.isEmpty()) return false; // encrypt() failed, dont even try anything further
 
-  QSaveFile file("vault.json");
+  QSaveFile file(FileUtils::vaultPath());
   if (!file.open(QIODevice::WriteOnly)) return false;
   if (file.write(encrypted) == -1) return false;
 
@@ -67,7 +68,7 @@ bool PasswordManager::SaveVault() {
 }
 
 bool PasswordManager::LoadVault() {
-  QFile file("vault.json");
+  QFile file(FileUtils::vaultPath());
   if (!file.open(QIODevice::ReadOnly)) {
     qWarning() << "Could not open file: ";
     return false;

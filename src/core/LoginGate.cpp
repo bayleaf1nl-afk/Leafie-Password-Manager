@@ -2,6 +2,7 @@
 #include "../platform/WindowManager.h"
 #include "../ui/GenericDialog.h"
 #include "../vault/PasswordManager.h"
+#include "FileUtils.h"
 #include <QDebug>
 #include <QDialog>
 #include <QFile>
@@ -21,7 +22,7 @@
 #include <sodium/randombytes.h>
 #include <sodium/utils.h>
 std::optional<PasswordManager> LoginGate::authenticate() {
-  QFile   file("master.txt");
+  QFile   file(FileUtils::masterFilePath());
   bool    isFirstLaunch = !file.exists();
   QString title         = isFirstLaunch ? "Set Master Password" : "Login";
   QString label         = isFirstLaunch ? "Please write your new master password" : "Please enter your master password";
@@ -105,7 +106,7 @@ bool LoginGate::readMasterFile(masterFileData &out, QFile &file) {
 
 std::optional<PasswordManager> LoginGate::firstTimeInstallation(const QString &title, const QString &label) {
 
-  QSaveFile     file("master.txt");
+  QSaveFile     file(FileUtils::masterFilePath());
   unsigned char loginSalt[crypto_pwhash_SALTBYTES];
   unsigned char vaultSalt[crypto_pwhash_SALTBYTES];
   randombytes_buf(loginSalt, sizeof loginSalt);
