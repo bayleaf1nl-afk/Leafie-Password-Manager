@@ -1,6 +1,7 @@
 #pragma once
 #include "../vault/PasswordManager.h"
 #include <QFile>
+#include <QSaveFile>
 #include <QString>
 #include <optional>
 #include <sodium/crypto_pwhash.h>
@@ -21,5 +22,5 @@ private:
   static bool verifyMasterFile(const QString &password, const unsigned char *storedSalt,
                                const unsigned char *storedHash);
 
-  static std::optional<PasswordManager> firstTimeInstallation(QFile &file, const QString &title, const QString &label);
+  static std::optional<PasswordManager> firstTimeInstallation(const QString &title, const QString &label);
 };

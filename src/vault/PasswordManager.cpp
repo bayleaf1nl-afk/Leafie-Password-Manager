@@ -5,6 +5,7 @@
 #include <qassert.h>
 #include <qdir.h>
 #include <qevent.h>
+#include <qfiledevice.h>
 #include <qjsonarray.h>
 #include <qjsondocument.h>
 #include <qjsonobject.h>
@@ -58,9 +59,11 @@ bool PasswordManager::SaveVault() {
 
   QSaveFile file("vault.json");
   if (!file.open(QIODevice::WriteOnly)) return false;
-  if (file.write(encrypted) != -1) return false;
+  if (file.write(encrypted) == -1) return false;
 
-  return file.commit();
+  if (!file.commit()) return false;
+  QFile(file.fileName()).setPermissions(QFileDevice::WriteOwner | QFileDevice::ReadOwner);
+  return true;
 }
 
 bool PasswordManager::LoadVault() {
@@ -92,11 +95,12 @@ bool PasswordManager::exportVault(const QString &path) const {
   QByteArray plaintext = stringify();
   QByteArray encrypted = encrypt(plaintext);
   if (encrypted.isEmpty()) return false;
-  QFile file(path);
+  QSaveFile file(path);
 
   if (!file.open(QIODevice::WriteOnly)) return false;
+  if (file.write(encrypted) != -1) return false;
 
-  return file.write(encrypted) != -1;
+  return file.commit();
 }
 
 bool PasswordManager::importVault(const QString &path) {
