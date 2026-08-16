@@ -1,7 +1,6 @@
 #include "PasswordManager.h"
 #include "PasswordEntry.h"
 #include <cstring>
-#include <iostream>
 #include <qassert.h>
 #include <qdir.h>
 #include <qevent.h>
@@ -53,9 +52,13 @@ bool PasswordManager::addEntry(const PasswordEntry &entry) {
 }
 
 bool PasswordManager::SaveVault() {
+  QByteArray plaintext = stringify();
+  QByteArray encrypted = encrypt(plaintext);
+  if (encrypted.isEmpty()) return false; // encrypt() failed, dont even try anything further
+
   QFile file("vault.json");
   if (!file.open(QIODevice::WriteOnly)) return false;
-  return file.write(stringify()) != -1;
+  return file.write(encrypted) != -1;
 }
 
 bool PasswordManager::LoadVault() {
@@ -64,33 +67,45 @@ bool PasswordManager::LoadVault() {
     qWarning() << "Could not open file: ";
     return false;
   };
-  QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-  if (doc.isNull()) {
+
+  QByteArray encrypted = file.readAll();
+  QByteArray plaintext = decrypt(encrypted);
+  if (plaintext.isEmpty()) return false; // decrypt() failed, don't even try anything
+
+  QJsonDocument doc = QJsonDocument::fromJson(plaintext);
+  if (doc.isNull() || !doc.isArray()) {
     qWarning() << "Vault file is corrupted or not valid JSON";
     return false;
   }
-  QJsonArray array = doc.array();
+  m_entries.clear();
 
-  for (const auto &value : array) {
+  for (const auto &value : doc.array()) {
+    if (!value.isObject()) continue;
     m_entries.push_back(PasswordEntry::fromJson(value.toObject()));
   }
   return true;
 }
 
 bool PasswordManager::exportVault(const QString &path) const {
+  QByteArray plaintext = stringify();
+  QByteArray encrypted = encrypt(plaintext);
+  if (encrypted.isEmpty()) return false;
   QFile file(path);
 
   if (!file.open(QIODevice::WriteOnly)) return false;
 
-  return file.write(stringify()) != -1;
+  return file.write(encrypted) != -1;
 }
 
 bool PasswordManager::importVault(const QString &path) {
   QFile file(path);
-
   if (!file.open(QIODevice::ReadOnly)) return false;
 
-  QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+  QByteArray encrypted = file.readAll();
+  QByteArray plaintext = decrypt(encrypted);
+  if (plaintext.isEmpty()) return false;
+
+  QJsonDocument doc = QJsonDocument::fromJson(plaintext);
 
   if (doc.isNull() || !doc.isArray()) return false;
 
@@ -98,7 +113,6 @@ bool PasswordManager::importVault(const QString &path) {
 
   for (const auto &value : array) {
     if (!value.isObject()) continue;
-
     m_entries.push_back(PasswordEntry::fromJson(value.toObject()));
   }
 
@@ -107,7 +121,7 @@ bool PasswordManager::importVault(const QString &path) {
 
 //------------------------------------------------------------------------------//
 
-QByteArray PasswordManager::stringify() const {
+QByteArray PasswordManager::stringify() const { // returns qbytearray of vault.json
   QJsonArray array;
 
   for (const auto &entry : m_entries) {
@@ -118,7 +132,7 @@ QByteArray PasswordManager::stringify() const {
   return doc.toJson();
 }
 
-QByteArray PasswordManager::encrypt(const QByteArray &plaintext) {
+QByteArray PasswordManager::encrypt(const QByteArray &plaintext) const {
   unsigned char nonce[crypto_secretbox_NONCEBYTES];
   randombytes_buf(nonce, sizeof nonce);
 
@@ -134,7 +148,7 @@ QByteArray PasswordManager::encrypt(const QByteArray &plaintext) {
   return result;
 }
 
-QByteArray PasswordManager::decrypt(const QByteArray &data) {
+QByteArray PasswordManager::decrypt(const QByteArray &data) const {
   if (data.size() < crypto_secretbox_NONCEBYTES + crypto_secretbox_MACBYTES) {
     return QByteArray(); // too short to possibly be valid.
   }
@@ -161,9 +175,14 @@ bool PasswordManager::deriveKey(const unsigned char *existingSalt = nullptr) {
   const std::string stdPass   = m_masterPassword.toStdString();
   const char *const passInput = stdPass.c_str();
 
-  if (crypto_pwhash(m_key, sizeof(m_key), passInput, stdPass.size(), salt, crypto_pwhash_OPSLIMIT_INTERACTIVE,
-                    crypto_pwhash_MEMLIMIT_INTERACTIVE, crypto_pwhash_ALG_DEFAULT) != 0) {
-    return false; //! oom error. handle it some other way but for now just return false
+  auto result = crypto_pwhash(m_key, sizeof(m_key), passInput, stdPass.size(), salt, crypto_pwhash_OPSLIMIT_INTERACTIVE,
+                              crypto_pwhash_MEMLIMIT_INTERACTIVE, crypto_pwhash_ALG_DEFAULT);
+  if (result == 0) {
+    return true;
   }
-  return true;
+  qDebug() << "crypto_pwhash result:" << result;
+  qDebug() << "key size:" << sizeof(m_key);
+  qDebug() << "salt size:" << sizeof(salt);
+  qDebug() << "password length:" << stdPass.size();
+  return false; //! oom error. handle it some other way but for now just return false
 }

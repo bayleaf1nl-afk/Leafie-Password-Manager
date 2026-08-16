@@ -1,7 +1,6 @@
 #include "core/LoginGate.h"
 #include "platform/WindowManager.h"
 #include "ui/MainWindow.h"
-#include "vault/PasswordEntry.h"
 #include "vault/PasswordManager.h"
 //---------------------------//
 #include <QApplication>
@@ -17,8 +16,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <iostream>
-#include <print>
+#include <optional>
 #include <qdebug.h>
 #include <qtmetamacros.h>
 #include <sodium.h>
@@ -28,12 +26,12 @@ int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
   app.setApplicationName("PasswordManager");
 
-  QString masterPassword;
-  if (!LoginGate::authenticate(masterPassword)) {
+  std::optional<PasswordManager> manager = LoginGate::authenticate();
+  if (!manager) {
     return 0;
-  }
+  } // auth and get candidate PM
 
-  MainWindow window;
+  MainWindow window(std::move(*manager)); // move candidate PasswordManager's ownership to MainWindow
   QFile      file(":/styles.qss");
 
   if (file.open(QFile::ReadOnly))

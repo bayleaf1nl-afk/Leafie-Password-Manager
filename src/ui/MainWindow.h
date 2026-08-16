@@ -27,7 +27,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
-  MainWindow();
+  explicit MainWindow(PasswordManager manager);
 
 private:
   //-------------//

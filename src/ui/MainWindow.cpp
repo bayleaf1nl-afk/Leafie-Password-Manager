@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-#include "../core/LoginGate.h"
 #include "../platform/WindowManager.h"
 #include "../vault/PasswordEntry.h"
 #include "../vault/PasswordManager.h"
@@ -33,8 +32,6 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <Qt>
-#include <cstddef>
-#include <iostream>
 #include <qabstractitemview.h>
 #include <qboxlayout.h>
 #include <qcontainerfwd.h>
@@ -52,10 +49,9 @@
 #include <qpushbutton.h>
 #include <qsize.h>
 #include <qsizepolicy.h>
-#include <qwidget.h>
-#include <qwindowdefs.h>
+#include <utility>
 
-MainWindow::MainWindow() : passwordManager("") {
+MainWindow::MainWindow(PasswordManager manager) : passwordManager(std::move(manager)) {
   setWindowTitle("Leaf's Password Manager");
   topMenu = new QMenuBar(this);
 
@@ -349,10 +345,12 @@ void MainWindow::refreshPasswordEntry(int row) {
   QHBoxLayout         *rowLayout = qobject_cast<QHBoxLayout *>(rowWidget->layout());
   if (!rowLayout) return;
 
+  // what the fuck
   static_cast<QLabel *>(rowLayout->itemAt(0)->widget())->setText(entry.site);
   static_cast<QLabel *>(rowLayout->itemAt(1)->widget())->setText(entry.username);
   static_cast<QLabel *>(rowLayout->itemAt(2)->widget())->setText(entry.email.isEmpty() ? "N/A" : entry.email);
-  static_cast<QLabel *>(rowLayout->itemAt(3)->widget())->setText(QString(entry.password.length(), '*'));
+  static_cast<QLabel *>(rowLayout->itemAt(3)->widget())
+      ->setText(QString(entry.password.length(), QChar(0x2022))); // fancy password dot •
 }
 
 void MainWindow::editPassword() {

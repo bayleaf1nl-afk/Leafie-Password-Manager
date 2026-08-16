@@ -24,8 +24,8 @@ public:
   bool       exportVault(const QString &path) const;
   bool       importVault(const QString &path);
   bool       deriveKey(const unsigned char *existingSalt);
-  QByteArray encrypt(const QByteArray &plaintext);
-  QByteArray decrypt(const QByteArray &data);
+  QByteArray encrypt(const QByteArray &plaintext) const;
+  QByteArray decrypt(const QByteArray &data) const;
   bool       isValidIndex(int index);
   QByteArray stringify() const;
 
