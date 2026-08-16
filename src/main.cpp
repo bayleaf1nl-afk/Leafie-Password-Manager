@@ -18,11 +18,18 @@
 #include <QWidget>
 #include <optional>
 #include <qdebug.h>
+#include <qlogging.h>
 #include <qtmetamacros.h>
 #include <sodium.h>
 #include <sodium/core.h>
 
 int main(int argc, char *argv[]) {
+  if (sodium_init() < 0) {
+    qFatal() << "libsodium failed to init\n";
+  } else {
+    qDebug() << "libsodium is alive\n";
+  }
+
   QApplication app(argc, argv);
   app.setApplicationName("PasswordManager");
 
@@ -44,12 +51,6 @@ int main(int argc, char *argv[]) {
   window.resize(800, 600);
   window.show();
   Platform::WindowUtils::centerWindow(&window);
-
-  if (sodium_init() < 0) {
-    qDebug() << "libsodium failed to init\n";
-  } else {
-    qDebug() << "libsodium is alive\n";
-  }
 
   return app.exec();
 }

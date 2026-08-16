@@ -1,5 +1,6 @@
 #include "PasswordManager.h"
 #include "PasswordEntry.h"
+#include <QSaveFile>
 #include <cstring>
 #include <qassert.h>
 #include <qdir.h>
@@ -17,7 +18,6 @@
 #include <sodium/randombytes.h>
 #include <sodium/utils.h>
 #include <string>
-
 PasswordManager::PasswordManager(const QString &masterPassword) { m_masterPassword = masterPassword; }
 PasswordManager::~PasswordManager() { sodium_memzero(m_key, sizeof m_key); }
 const QVector<PasswordEntry> &PasswordManager::entries() const { return m_entries; }
@@ -56,9 +56,11 @@ bool PasswordManager::SaveVault() {
   QByteArray encrypted = encrypt(plaintext);
   if (encrypted.isEmpty()) return false; // encrypt() failed, dont even try anything further
 
-  QFile file("vault.json");
+  QSaveFile file("vault.json");
   if (!file.open(QIODevice::WriteOnly)) return false;
-  return file.write(encrypted) != -1;
+  if (file.write(encrypted) != -1) return false;
+
+  return file.commit();
 }
 
 bool PasswordManager::LoadVault() {
