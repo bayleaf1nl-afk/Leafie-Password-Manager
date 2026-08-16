@@ -8,8 +8,10 @@
 #include <QFileDevice>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QSaveFile>
 #include <QTimer>
 #include <optional>
+#include <qcborvalue.h>
 #include <qcontainerfwd.h>
 #include <qdebug.h>
 #include <qmessagebox.h>
@@ -25,7 +27,7 @@ std::optional<PasswordManager> LoginGate::authenticate() {
   QString label         = isFirstLaunch ? "Please write your new master password" : "Please enter your master password";
 
   if (isFirstLaunch) {
-    return firstTimeInstallation(file, title, label);
+    return firstTimeInstallation(title, label);
   }
 
   if (!file.open(QIODevice::ReadOnly)) {
@@ -48,7 +50,7 @@ std::optional<PasswordManager> LoginGate::authenticate() {
     DialogUtils::GenericDialog dlg("Login", {{label, QLineEdit::Password}}, false);
 
     if (dlg.exec() != QDialog::Accepted) return std::nullopt;
-    QString password = dlg.inputText(0);
+    QByteArray password = dlg.inputText(0).toUtf8();
 
     if (!verifyMasterFile(password, data.loginSalt, data.loginHash)) {
       continue;
@@ -63,6 +65,8 @@ std::optional<PasswordManager> LoginGate::authenticate() {
       QMessageBox::critical(nullptr, "Login failed", "Vault file is corrupted.");
       return std::nullopt;
     }
+    sodium_memzero(password.data(), password.size());
+    password.clear();
     return candidate;
   }
 
@@ -99,8 +103,9 @@ bool LoginGate::readMasterFile(masterFileData &out, QFile &file) {
   return true;
 }
 
-std::optional<PasswordManager> LoginGate::firstTimeInstallation(QFile &file, const QString &title,
-                                                                const QString &label) {
+std::optional<PasswordManager> LoginGate::firstTimeInstallation(const QString &title, const QString &label) {
+
+  QSaveFile     file("master.txt");
   unsigned char loginSalt[crypto_pwhash_SALTBYTES];
   unsigned char vaultSalt[crypto_pwhash_SALTBYTES];
   randombytes_buf(loginSalt, sizeof loginSalt);
@@ -129,6 +134,10 @@ std::optional<PasswordManager> LoginGate::firstTimeInstallation(QFile &file, con
   file.write(reinterpret_cast<const char *>(computedHash), sizeof computedHash);
   file.write(reinterpret_cast<const char *>(vaultSalt), sizeof vaultSalt);
 
+  if (!file.commit()) {
+    QMessageBox::critical(nullptr, "Error", "Could not finalize master password file write");
+    return std::nullopt;
+  }
   PasswordManager candidate(outMasterPassword);
   if (!candidate.deriveKey(vaultSalt)) {
     QMessageBox::critical(nullptr, "Error", "Could not derive the key to encrypt the vault!");
