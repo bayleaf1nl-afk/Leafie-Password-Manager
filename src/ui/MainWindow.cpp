@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include "../core/PasswordUtils.h"
 #include "../platform/WindowManager.h"
 #include "../vault/PasswordEntry.h"
 #include "../vault/PasswordManager.h"
@@ -49,7 +50,6 @@
 #include <qpushbutton.h>
 #include <qsize.h>
 #include <qsizepolicy.h>
-#include <utility>
 
 MainWindow::MainWindow(PasswordManager manager) : passwordManager(std::move(manager)) {
   setWindowTitle("Leaf's Password Manager");
@@ -59,7 +59,6 @@ MainWindow::MainWindow(PasswordManager manager) : passwordManager(std::move(mana
   createActions();
   createMenus();
 
-  passwordManager.LoadVault();
   for (const auto &entry : passwordManager.entries()) {
     addEntryToList(entry);
   }
@@ -217,6 +216,35 @@ QWidget *MainWindow::createRightPanel() {
 
   rightLayout->addSpacing(12);
 
+  auto *strengthLabel = new QLabel;
+  rightLayout->addWidget(strengthLabel);
+
+  connect(passwordEdit, &QLineEdit::textChanged, this, [this, strengthLabel](const QString &text) {
+    QStringList context = {siteEdit->text(), usernameEdit->text(), emailEdit->text()};
+    double      score   = PasswordUtils::estimateStrength(text, context);
+    strengthLabel->setText(PasswordUtils::strengthLabel(score));
+  });
+
+  auto *genButtonLayout = new QHBoxLayout;
+  auto *quickGenButton  = new QPushButton("Generate");
+  auto *advGenButton    = new QPushButton("⚙");
+  genButtonLayout->addWidget(quickGenButton);
+  genButtonLayout->addWidget(advGenButton);
+  rightLayout->addLayout(genButtonLayout);
+
+  connect(quickGenButton, &QPushButton::clicked, this,
+          [this]() { passwordEdit->setText(PasswordUtils::generatePassword(m_lastGenerationSettings)); });
+
+  connect(advGenButton, &QPushButton::clicked, this, [this]() {
+    DialogUtils::PasswordGenerationWindow dlg(this, m_lastGenerationSettings);
+    if (dlg.exec() == QDialog::Accepted) {
+      m_lastGenerationSettings = dlg.currentSettings();
+      passwordEdit->setText(dlg.generatedPassword());
+    }
+  });
+
+  rightLayout->addSpacing(13);
+
   auto *buttonLayout = new QHBoxLayout;
   auto *saveButton   = new QPushButton("Save");
   buttonLayout->addWidget(saveButton);
@@ -240,12 +268,20 @@ QWidget *MainWindow::createRightPanel() {
   return rightWidget;
 }
 
+bool MainWindow::isEntryComplete(const PasswordEntry &entry, ValidationMode mode) const {
+  if (mode == ValidationMode::Strict) {
+    return !entry.site.isEmpty() && !entry.username.isEmpty() && !entry.email.isEmpty() && !entry.password.isEmpty();
+  } else {
+    return !entry.site.isEmpty() && !entry.password.isEmpty();
+  }
+}
+
 void MainWindow::NewPassword() {
   QVector<DialogField> fields = {
       {"Site: ", QLineEdit::Normal},
       {"Username: ", QLineEdit::Normal},
       {"Email: ", QLineEdit::Normal},
-      {"Password: ", QLineEdit::Password},
+      {"Password: ", QLineEdit::Password, true},
   };
 
   DialogUtils::GenericDialog dlg("New Password", fields, false, this);
@@ -257,6 +293,12 @@ void MainWindow::NewPassword() {
   entry.email    = dlg.inputText(2);
   entry.password = dlg.inputText(3);
 
+  if (!isEntryComplete(entry, ValidationMode::Strict)) {
+    QMessageBox::warning(this, "Missing Info",
+                         "All fields are required. [This can be bypassed by editing the password after creation, but "
+                         "site & password are strictly required.]");
+    return;
+  }
   if (passwordManager.isDuplicateEntry(entry.site, entry.username)) {
     int choice = DialogUtils::confirmationWindow(
         "Confirmation", "There already exists an entry with the same site and username. Add anyway?");
@@ -320,14 +362,19 @@ void MainWindow::addEntryToList(const PasswordEntry &entry) {
   auto            *rowLayout = new QHBoxLayout(rowWidget);
 
   rowLayout->addWidget(new QLabel(entry.site), 2);
-  rowLayout->addWidget(new QLabel(entry.username), 2);
+  rowLayout->addWidget(new QLabel(entry.username), 3);
   rowLayout->addWidget(new QLabel(entry.email.isEmpty() ? "N/A" : entry.email), 2);
-  rowLayout->addWidget(new QLabel(QString(entry.password.length(), '*')), 2);
+  rowLayout->addWidget(new QLabel(QString(entry.password.length(), QChar(0x2022))),
+                       2); // evil fancy • password dot again
 
   auto *copyButton = new QPushButton("Copy");
   connect(copyButton, &QPushButton::clicked, this,
           [this, row]() { Platform::WindowUtils::copyToClipboard(passwordManager.entries()[row]); });
   rowLayout->addWidget(copyButton);
+
+  auto *revealButton = new QPushButton("👁");
+  connect(revealButton, &QPushButton::clicked, this, [this, row]() { setRevealedRow(row); });
+  rowLayout->addWidget(revealButton);
 
   rowLayout->setContentsMargins(4, 2, 4, 2);
   item->setSizeHint(rowWidget->sizeHint() + QSize(40, 20));
@@ -349,8 +396,17 @@ void MainWindow::refreshPasswordEntry(int row) {
   static_cast<QLabel *>(rowLayout->itemAt(0)->widget())->setText(entry.site);
   static_cast<QLabel *>(rowLayout->itemAt(1)->widget())->setText(entry.username);
   static_cast<QLabel *>(rowLayout->itemAt(2)->widget())->setText(entry.email.isEmpty() ? "N/A" : entry.email);
+
+  bool revealed = (row == m_revealedRow);
   static_cast<QLabel *>(rowLayout->itemAt(3)->widget())
-      ->setText(QString(entry.password.length(), QChar(0x2022))); // fancy password dot •
+      ->setText(revealed ? entry.password : QString(entry.password.length(), QChar(0x2022))); // fancy password dot •
+}
+
+void MainWindow::setRevealedRow(int row) {
+  m_revealedRow = (m_revealedRow == row) ? -1 : row;
+  for (int i = 0; i < passwordList->count(); ++i) {
+    refreshPasswordEntry(i);
+  }
 }
 
 void MainWindow::editPassword() {
@@ -364,7 +420,10 @@ void MainWindow::editPassword() {
   entry.username = usernameEdit->text();
   entry.email    = emailEdit->text();
   entry.password = passwordEdit->text();
-
+  if (!isEntryComplete(entry, ValidationMode::Loose)) {
+    QMessageBox::warning(this, "Missing Info", "Site and password cannot be empty.");
+    return;
+  }
   if (!passwordManager.updateEntry(editingRow, entry)) return;
   refreshPasswordEntry(editingRow);
   closeEditMenu();

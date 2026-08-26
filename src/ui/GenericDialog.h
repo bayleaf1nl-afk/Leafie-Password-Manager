@@ -10,7 +10,8 @@
 #include <qwindowdefs.h>
 struct DialogField {
   QString             label;
-  QLineEdit::EchoMode echoMode = QLineEdit::Normal;
+  QLineEdit::EchoMode echoMode          = QLineEdit::Normal;
+  bool                hasGenerateButton = false; // im too lazy
 };
 
 namespace DialogUtils {

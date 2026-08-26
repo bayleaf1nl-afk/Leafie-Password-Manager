@@ -29,6 +29,7 @@ qt_add_executable(PasswordManager
     src/platform/WindowManager.h
     src/ui/DialogUtils.h
     src/core/FileUtils.h
+    src/core/PasswordUtils.h
 
     src/vault/PasswordEntry.cpp
     src/core/LoginGate.cpp
@@ -40,9 +41,16 @@ qt_add_executable(PasswordManager
     src/platform/WindowUtils.cpp
     src/vault/PasswordManager.cpp
     src/core/FileUtils.cpp
+    src/core/PasswordUtils.cpp
     ${RESOURCES}
 )
 
 target_link_libraries(PasswordManager PRIVATE Qt6::Widgets)
 target_link_libraries(PasswordManager PRIVATE ${SODIUM_LIBRARIES})
 target_include_directories(PasswordManager PRIVATE ${SODIUM_INCLUDE_DIRS})
+target_include_directories(PasswordManager PRIVATE third_party/zxcvbn-cpp/native-src)
+file(GLOB ZXCVBN_SOURCES third_party/zxcvbn-cpp/native-src/zxcvbn/*.cpp)
+list(FILTER ZXCVBN_SOURCES EXCLUDE REGEX ".*js.*\\.cpp$")
+message(STATUS "ZXCVBN_SOURCES: ${ZXCVBN_SOURCES}")
+target_sources(PasswordManager PRIVATE ${ZXCVBN_SOURCES})
+set_source_files_properties(${ZXCVBN_SOURCES} PROPERTIES CXX_STANDARD 14)

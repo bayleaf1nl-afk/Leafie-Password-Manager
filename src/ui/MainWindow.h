@@ -1,4 +1,5 @@
 #pragma once
+#include "../core/PasswordUtils.h"
 #include "../vault/PasswordEntry.h"
 #include "../vault/PasswordManager.h"
 #include <QAction>
@@ -18,16 +19,12 @@
 #include <qtmetamacros.h>
 #include <qwidget.h>
 
-namespace Utilities {
-QString generatePassword();
-bool    isStrongPassword();
-} // namespace Utilities
-
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
   explicit MainWindow(PasswordManager manager);
+  enum class ValidationMode { Strict, Loose };
 
 private:
   //-------------//
@@ -35,9 +32,12 @@ private:
   QLineEdit *username;
   QLineEdit *password;
 
-  PasswordManager passwordManager;
+  PasswordManager                   passwordManager;
+  PasswordUtils::GenerationSettings m_lastGenerationSettings;
 
-  int               editingRow   = -1;
+  int editingRow    = -1;
+  int m_revealedRow = -1;
+
   PasswordEntry    *editingEntry = nullptr;
   QLineEdit        *passwordEdit = nullptr;
   QLineEdit        *emailEdit    = nullptr;
@@ -84,7 +84,8 @@ private:
   QWidget *createRightPanel();
   void     setupFramelessWindow();
   void     refreshPasswordEntry(int row);
-
+  void     setRevealedRow(int row);
+  bool     isEntryComplete(const PasswordEntry &entry, ValidationMode mode) const;
 private slots:
   void NewPassword();
   void RemovePassword(bool forceDelete = false);

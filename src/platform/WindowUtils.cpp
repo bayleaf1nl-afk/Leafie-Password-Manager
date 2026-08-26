@@ -15,7 +15,10 @@ void centerWindow(QWidget *window) {
   window->move(geometry.center() - window->rect().center());
 }
 
-void copyToClipboard(const PasswordEntry &entry) { QApplication::clipboard()->setText(entry.password); }
+void copyToClipboard(const PasswordEntry &entry) {
+  QApplication::clipboard()->setText(entry.password);
+  QTimer::singleShot(30000, []() { QApplication::clipboard()->clear(); });
+}
 } // namespace Platform::WindowUtils
 
 namespace Platform {

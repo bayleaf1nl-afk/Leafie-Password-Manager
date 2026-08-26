@@ -1,4 +1,5 @@
 #include "GenericDialog.h"
+#include "../core/PasswordUtils.h"
 #include <QBoxLayout>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -25,6 +26,26 @@ GenericDialog::GenericDialog(const QString &Title, const QVector<DialogField> &f
     input->setEchoMode(field.echoMode);
     layout->addWidget(label);
     layout->addWidget(input);
+
+    if (field.hasGenerateButton) {
+      auto *fieldRow = new QHBoxLayout;
+      fieldRow->addWidget(input);
+      auto *genButton = new QPushButton("Generate", this);
+      connect(genButton, &QPushButton::clicked, this,
+              [input]() { input->setText(PasswordUtils::generatePassword({})); });
+      fieldRow->addWidget(genButton);
+      layout->addLayout(fieldRow);
+
+      auto *strengthLabel = new QLabel(this);
+      connect(input, &QLineEdit::textChanged, this, [strengthLabel](const QString &text) {
+        double score = PasswordUtils::estimateStrength(text, {});
+        strengthLabel->setText(PasswordUtils::strengthLabel(score));
+      });
+      layout->addWidget(strengthLabel);
+    } else {
+      layout->addWidget(input);
+    }
+
     genericInputs.push_back(input);
   }
 
