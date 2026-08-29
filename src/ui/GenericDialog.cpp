@@ -72,8 +72,9 @@ void GenericDialog::showEvent(QShowEvent *event) {
 
 void GenericDialog::buildFields(const QVector<DialogField> &fields, bool showFileSelectionButton) {
   for (const auto &field : fields) {
-    QLineEdit *input = field.hasGenerateButton ? Widgets::addGeneratedPasswordField(*this, field.label)
-                                               : Widgets::addTextField(*this, field.label, field.echoMode);
+    QLineEdit *input = field.hasGenerateButton
+                           ? Widgets::addGeneratedPasswordField(*this, field.label, field.echoMode)
+                           : Widgets::addTextField(*this, field.label, field.echoMode);
     genericInputs.push_back(input);
   }
 
@@ -101,11 +102,11 @@ QLineEdit *addTextField(GenericDialog &dialog, const QString &label, QLineEdit::
   return dialog.addLabelledWidget(label, input);
 }
 
-QLineEdit *addGeneratedPasswordField(GenericDialog &dialog, const QString &label) {
+QLineEdit *addGeneratedPasswordField(GenericDialog &dialog, const QString &label, QLineEdit::EchoMode echoMode) {
   dialog.addLabel(label);
 
   auto *input = new QLineEdit;
-  input->setEchoMode(QLineEdit::Password);
+  input->setEchoMode(echoMode);
 
   auto *row       = new QHBoxLayout;
   auto *genButton = new QPushButton("Generate");

@@ -96,7 +96,8 @@ QLineEdit *addTextField(GenericDialog &dialog, const QString &label,
                         QLineEdit::EchoMode echoMode = QLineEdit::Normal);
 
 // line edit + Generate button + live strength label
-QLineEdit *addGeneratedPasswordField(GenericDialog &dialog, const QString &label);
+QLineEdit *addGeneratedPasswordField(GenericDialog &dialog, const QString &label,
+                                     QLineEdit::EchoMode echoMode = QLineEdit::Password);
 
 // line edit + Browse... button feeding that same field
 QLineEdit *addFilePathField(GenericDialog &dialog, const QString &label,
