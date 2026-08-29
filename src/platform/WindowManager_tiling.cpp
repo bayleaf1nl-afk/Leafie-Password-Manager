@@ -20,7 +20,8 @@ void requestFloating(QWidget *window) {
   auto json = QJsonDocument::fromJson(proc.readAllStandardOutput());
 
   // Several windows of this app can be mapped at once, so the class alone does not identify one.
-  // Prefer the client whose title matches, then the focused one, and only then give up.
+  // Titles are not unique either, so focus breaks the tie: a just-shown dialog is the focused client.
+  QString focusedTitleMatch;
   QString titleMatch;
   QString focusedMatch;
 
@@ -28,15 +29,18 @@ void requestFloating(QWidget *window) {
     auto obj = value.toObject();
     if (obj["class"].toString() != QApplication::applicationName()) continue;
 
-    if (titleMatch.isEmpty() && obj["title"].toString() == window->windowTitle()) {
-      titleMatch = obj["address"].toString();
-    }
-    if (focusedMatch.isEmpty() && obj["focusHistoryID"].toInt(-1) == 0) {
-      focusedMatch = obj["address"].toString();
-    }
+    const QString address   = obj["address"].toString();
+    const bool    sameTitle = obj["title"].toString() == window->windowTitle();
+    const bool    focused   = obj["focusHistoryID"].toInt(-1) == 0;
+
+    if (sameTitle && focused && focusedTitleMatch.isEmpty()) focusedTitleMatch = address;
+    if (sameTitle && titleMatch.isEmpty()) titleMatch = address;
+    if (focused && focusedMatch.isEmpty()) focusedMatch = address;
   }
 
-  QString address = titleMatch.isEmpty() ? focusedMatch : titleMatch;
+  QString address = focusedTitleMatch;
+  if (address.isEmpty()) address = titleMatch;
+  if (address.isEmpty()) address = focusedMatch;
   if (address.isEmpty()) {
     qDebug() << "no hyprland client matched" << QApplication::applicationName() << window->windowTitle();
     return;
