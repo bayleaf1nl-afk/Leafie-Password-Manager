@@ -27,6 +27,7 @@ public:
 private:
   QVector<QLineEdit *> genericInputs;
   QDialogButtonBox    *genericButtonBox;
+
 private slots:
   void browseForFile();
 };

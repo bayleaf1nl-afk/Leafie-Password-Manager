@@ -43,13 +43,15 @@ double PasswordUtils::estimateStrength(const QString &password, const QStringLis
     userInputs.push_back(s.c_str());
   userInputs.push_back(nullptr);
   zxcvbn_guesses_t guesses = 0;
-  int              rc = zxcvbn_password_strength(password.toStdString().c_str(), userInputs.data(), &guesses, nullptr);
+
+  int rc = zxcvbn_password_strength(password.toStdString().c_str(), userInputs.data(), &guesses, nullptr);
   if (rc != 0) return 0.0; // failed
 
   return std::log10(guesses);
 }
 
 QString PasswordUtils::strengthLabel(double guessesLog10) {
+  // read on zxcvbn docs for more info; these are kind of arbitrary and magic numbers
   if (guessesLog10 < 3) return "Very Weak";
   if (guessesLog10 < 6) return "Weak";
   if (guessesLog10 < 8) return "Okay";
