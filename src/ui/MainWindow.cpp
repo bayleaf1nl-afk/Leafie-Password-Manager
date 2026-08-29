@@ -291,7 +291,7 @@ void MainWindow::NewPassword() {
   entry.site     = dlg.inputText(0);
   entry.username = dlg.inputText(1);
   entry.email    = dlg.inputText(2);
-  entry.password = dlg.inputText(3);
+  entry.password = SecureString(dlg.inputText(3));
 
   if (!isEntryComplete(entry, ValidationMode::Strict)) {
     QMessageBox::warning(this, "Missing Info",
@@ -364,7 +364,7 @@ void MainWindow::addEntryToList(const PasswordEntry &entry) {
   rowLayout->addWidget(new QLabel(entry.site), 2);
   rowLayout->addWidget(new QLabel(entry.username), 3);
   rowLayout->addWidget(new QLabel(entry.email.isEmpty() ? "N/A" : entry.email), 2);
-  rowLayout->addWidget(new QLabel(QString(entry.password.length(), QChar(0x2022))),
+  rowLayout->addWidget(new QLabel(QString(entry.password.charCount(), QChar(0x2022))),
                        2); // evil fancy • password dot again
 
   auto *copyButton = new QPushButton("Copy");
@@ -399,7 +399,8 @@ void MainWindow::refreshPasswordEntry(int row) {
 
   bool revealed = (row == m_revealedRow);
   static_cast<QLabel *>(rowLayout->itemAt(3)->widget())
-      ->setText(revealed ? entry.password : QString(entry.password.length(), QChar(0x2022))); // fancy password dot •
+      ->setText(revealed ? entry.password.toQString()
+                         : QString(entry.password.charCount(), QChar(0x2022))); // fancy password dot •
 }
 
 void MainWindow::setRevealedRow(int row) {
@@ -419,7 +420,7 @@ void MainWindow::editPassword() {
   entry.site     = siteEdit->text();
   entry.username = usernameEdit->text();
   entry.email    = emailEdit->text();
-  entry.password = passwordEdit->text();
+  entry.password = SecureString(passwordEdit->text());
   if (!isEntryComplete(entry, ValidationMode::Loose)) {
     QMessageBox::warning(this, "Missing Info", "Site and password cannot be empty.");
     return;
@@ -438,7 +439,7 @@ void MainWindow::editPasswordMenu() {
   siteEdit->setText(passwordManager.entries()[row].site);
   usernameEdit->setText(passwordManager.entries()[row].username);
   emailEdit->setText(passwordManager.entries()[row].email);
-  passwordEdit->setText(passwordManager.entries()[row].password);
+  passwordEdit->setText(passwordManager.entries()[row].password.toQString());
 
   rightWidget->show();
 }
@@ -460,7 +461,7 @@ void MainWindow::resetEditPasswordFields() {
   siteEdit->setText(entry.site);
   usernameEdit->setText(entry.username);
   emailEdit->setText(entry.email);
-  passwordEdit->setText(entry.password);
+  passwordEdit->setText(entry.password.toQString());
 }
 
 void MainWindow::closeEditMenu() {

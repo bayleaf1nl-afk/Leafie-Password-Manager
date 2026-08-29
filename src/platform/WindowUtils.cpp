@@ -16,7 +16,7 @@ void centerWindow(QWidget *window) {
 }
 
 void copyToClipboard(const PasswordEntry &entry) {
-  QApplication::clipboard()->setText(entry.password);
+  QApplication::clipboard()->setText(entry.password.toQString());
   QTimer::singleShot(30000, []() { QApplication::clipboard()->clear(); });
 }
 } // namespace Platform::WindowUtils

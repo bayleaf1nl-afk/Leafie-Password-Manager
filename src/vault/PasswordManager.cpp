@@ -19,9 +19,48 @@
 #include <sodium/crypto_secretbox.h>
 #include <sodium/randombytes.h>
 #include <sodium/utils.h>
-#include <string>
-PasswordManager::PasswordManager(const QString &masterPassword) { m_masterPassword = masterPassword; }
-PasswordManager::~PasswordManager() { sodium_memzero(m_key, sizeof m_key); }
+#include <utility>
+
+namespace {
+void wipe(QByteArray &buffer) {
+  if (!buffer.isEmpty()) sodium_memzero(buffer.data(), buffer.size());
+  buffer.clear();
+}
+} // namespace
+
+PasswordManager::PasswordManager() {
+  m_key = static_cast<unsigned char *>(sodium_malloc(KEY_BYTES));
+  if (!m_key) qFatal("could not allocate guarded memory for the vault key");
+  sodium_memzero(salt, sizeof salt);
+  sodium_mlock(salt, sizeof salt);
+}
+
+PasswordManager::PasswordManager(PasswordManager &&other) noexcept : m_entries(std::move(other.m_entries)) {
+  sodium_mlock(salt, sizeof salt);
+  memcpy(salt, other.salt, sizeof salt);
+  m_key       = other.m_key;
+  other.m_key = nullptr;
+  sodium_memzero(other.salt, sizeof other.salt);
+}
+
+PasswordManager &PasswordManager::operator=(PasswordManager &&other) noexcept {
+  if (this == &other) return *this;
+
+  m_entries = std::move(other.m_entries);
+  sodium_free(m_key);
+  m_key       = other.m_key;
+  other.m_key = nullptr;
+  memcpy(salt, other.salt, sizeof salt);
+  sodium_memzero(other.salt, sizeof other.salt);
+  return *this;
+}
+
+PasswordManager::~PasswordManager() {
+  sodium_free(m_key); // zeroes the key before unlocking and releasing the guarded pages
+  m_key = nullptr;
+  sodium_munlock(salt, sizeof salt); // zeroes as well
+}
+
 const QVector<PasswordEntry> &PasswordManager::entries() const { return m_entries; }
 
 bool PasswordManager::isValidIndex(int index) { return index >= 0 && index < m_entries.size(); }
@@ -56,6 +95,7 @@ bool PasswordManager::addEntry(const PasswordEntry &entry) {
 bool PasswordManager::SaveVault() {
   QByteArray plaintext = stringify();
   QByteArray encrypted = encrypt(plaintext);
+  wipe(plaintext);
   if (encrypted.isEmpty()) return false; // encrypt() failed, dont even try anything further
 
   QSaveFile file(FileUtils::vaultPath());
@@ -79,6 +119,7 @@ bool PasswordManager::LoadVault() {
   if (plaintext.isEmpty()) return false; // decrypt() failed, don't even try anything
 
   QJsonDocument doc = QJsonDocument::fromJson(plaintext);
+  wipe(plaintext);
   if (doc.isNull() || !doc.isArray()) {
     qWarning() << "Vault file is corrupted or not valid JSON";
     return false;
@@ -95,6 +136,7 @@ bool PasswordManager::LoadVault() {
 bool PasswordManager::exportVault(const QString &path) const {
   QByteArray plaintext = stringify();
   QByteArray encrypted = encrypt(plaintext);
+  wipe(plaintext);
   if (encrypted.isEmpty()) return false;
   QSaveFile file(path);
 
@@ -113,6 +155,7 @@ bool PasswordManager::importVault(const QString &path) {
   if (plaintext.isEmpty()) return false;
 
   QJsonDocument doc = QJsonDocument::fromJson(plaintext);
+  wipe(plaintext);
 
   if (doc.isNull() || !doc.isArray()) return false;
 
@@ -172,24 +215,34 @@ QByteArray PasswordManager::decrypt(const QByteArray &data) const {
   return plaintext;
 }
 
-bool PasswordManager::deriveKey(const unsigned char *existingSalt = nullptr) {
+bool PasswordManager::deriveKey(QByteArray &masterPassword, const unsigned char *existingSalt) {
   if (existingSalt) {
     memcpy(salt, existingSalt, sizeof salt); // copy it from pre-existing salt
   } else {
     randombytes_buf(salt, sizeof salt); // generate one otherwise; first login only
   }
 
-  const std::string stdPass   = m_masterPassword.toStdString();
-  const char *const passInput = stdPass.c_str();
+  const std::size_t passLength = static_cast<std::size_t>(masterPassword.size());
 
-  auto result = crypto_pwhash(m_key, sizeof(m_key), passInput, stdPass.size(), salt, crypto_pwhash_OPSLIMIT_INTERACTIVE,
+  char *passInput = static_cast<char *>(sodium_malloc(passLength + 1));
+  if (!passInput) {
+    wipe(masterPassword);
+    return false;
+  }
+  memcpy(passInput, masterPassword.constData(), passLength);
+  passInput[passLength] = '\0';
+  wipe(masterPassword); // the caller's copy is gone from here on
+
+  auto result = crypto_pwhash(m_key, KEY_BYTES, passInput, passLength, salt, crypto_pwhash_OPSLIMIT_INTERACTIVE,
                               crypto_pwhash_MEMLIMIT_INTERACTIVE, crypto_pwhash_ALG_DEFAULT);
+  sodium_free(passInput);
+
   if (result == 0) {
     return true;
   }
   qDebug() << "crypto_pwhash result:" << result;
-  qDebug() << "key size:" << sizeof(m_key);
+  qDebug() << "key size:" << KEY_BYTES;
   qDebug() << "salt size:" << sizeof(salt);
-  qDebug() << "password length:" << stdPass.size();
+  qDebug() << "password length:" << passLength;
   return false; //! oom error. handle it some other way but for now just return false
 }

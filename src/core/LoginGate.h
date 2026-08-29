@@ -1,5 +1,6 @@
 #pragma once
 #include "../vault/PasswordManager.h"
+#include <QByteArray>
 #include <QFile>
 #include <QSaveFile>
 #include <QString>
@@ -19,7 +20,7 @@ public:
 private:
   static bool readMasterFile(masterFileData &out, QFile &file);
   bool        writeMasterFile();
-  static bool verifyMasterFile(const QString &password, const unsigned char *storedSalt,
+  static bool verifyMasterFile(const QByteArray &password, const unsigned char *storedSalt,
                                const unsigned char *storedHash);
 
   static std::optional<PasswordManager> firstTimeInstallation(const QString &title, const QString &label);

@@ -6,7 +6,7 @@ QJsonObject PasswordEntry::toJson() const {
   obj["site"]     = site;
   obj["username"] = username;
   obj["email"]    = email;
-  obj["password"] = password;
+  obj["password"] = password.toQString();
   return obj;
 }
 
@@ -15,6 +15,6 @@ PasswordEntry PasswordEntry::fromJson(const QJsonObject &obj) {
   entry.site     = obj["site"].toString();
   entry.username = obj["username"].toString();
   entry.email    = obj["email"].toString();
-  entry.password = obj["password"].toString();
+  entry.password = SecureString(obj["password"].toString());
   return entry;
 }
