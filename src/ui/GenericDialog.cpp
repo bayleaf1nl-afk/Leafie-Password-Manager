@@ -1,64 +1,87 @@
 #include "GenericDialog.h"
 #include "../core/PasswordUtils.h"
+#include "../core/SecureString.h"
+#include "../platform/WindowManager.h"
 #include <QBoxLayout>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QLabel>
-#include <QLine>
 #include <QLineEdit>
 #include <QObject>
-#include <QProcess>
 #include <QPushButton>
+#include <QShowEvent>
 #include <QWidget>
 #include <qcontainerfwd.h>
 #include <qwindowdefs.h>
+
 namespace DialogUtils {
+
+GenericDialog::GenericDialog(const QString &title, QDialogButtonBox::StandardButtons buttons, QWidget *parent)
+    : QDialog(parent) {
+  setWindowTitle(title);
+
+  auto *outer = new QVBoxLayout(this);
+  content     = new QVBoxLayout;
+  outer->addLayout(content);
+
+  genericButtonBox = new QDialogButtonBox(buttons, this);
+  connect(genericButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+  connect(genericButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+  outer->addWidget(genericButtonBox);
+}
 
 GenericDialog::GenericDialog(const QString &Title, const QVector<DialogField> &fields, bool showFileSelectionButton,
                              QWidget *parent)
-    : QDialog(parent) {
-  setWindowTitle(Title);
-  auto *layout = new QVBoxLayout(this);
+    : GenericDialog(Title, QDialogButtonBox::Ok | QDialogButtonBox::Cancel, parent) {
+  buildFields(fields, showFileSelectionButton);
+}
+
+GenericDialog::~GenericDialog() {
+  for (const QPointer<QWidget> &widget : callerOwned) {
+    if (!widget) continue;
+    content->removeWidget(widget);
+    widget->setParent(nullptr);
+  }
+}
+
+void GenericDialog::hostWidget(QWidget *widget, Ownership ownership) {
+  if (!widget) return;
+  content->addWidget(widget);
+  if (ownership == Ownership::Caller) callerOwned.push_back(widget);
+}
+
+void GenericDialog::addRow(QLayout *row) {
+  if (row) content->addLayout(row);
+}
+
+void GenericDialog::addLabel(const QString &text) { content->addWidget(new QLabel(text, this)); }
+
+void GenericDialog::addStretch(int stretch) { content->addStretch(stretch); }
+
+void GenericDialog::setAcceptEnabled(bool enabled) {
+  if (auto *ok = genericButtonBox->button(QDialogButtonBox::Ok)) ok->setEnabled(enabled);
+}
+
+void GenericDialog::showEvent(QShowEvent *event) {
+  QDialog::showEvent(event);
+  if (floatingRequested) return;
+  floatingRequested = true;
+  Platform::attemptFloating(this);
+}
+
+void GenericDialog::buildFields(const QVector<DialogField> &fields, bool showFileSelectionButton) {
   for (const auto &field : fields) {
-    auto *label = new QLabel(field.label, this);
-    auto *input = new QLineEdit(this);
-    input->setEchoMode(field.echoMode);
-    layout->addWidget(label);
-    layout->addWidget(input);
-
-    if (field.hasGenerateButton) {
-      auto *fieldRow = new QHBoxLayout;
-      fieldRow->addWidget(input);
-      auto *genButton = new QPushButton("Generate", this);
-      connect(genButton, &QPushButton::clicked, this,
-              [input]() { input->setText(PasswordUtils::generatePassword({})); });
-      fieldRow->addWidget(genButton);
-      layout->addLayout(fieldRow);
-
-      auto *strengthLabel = new QLabel(this);
-      connect(input, &QLineEdit::textChanged, this, [strengthLabel](const QString &text) {
-        double score = PasswordUtils::estimateStrength(text, {});
-        strengthLabel->setText(PasswordUtils::strengthLabel(score));
-      });
-      layout->addWidget(strengthLabel);
-    } else {
-      layout->addWidget(input);
-    }
-
+    QLineEdit *input = field.hasGenerateButton ? Widgets::addGeneratedPasswordField(*this, field.label)
+                                               : Widgets::addTextField(*this, field.label, field.echoMode);
     genericInputs.push_back(input);
   }
 
   if (showFileSelectionButton) {
     auto *browseButton = new QPushButton("Browse...", this);
     connect(browseButton, &QPushButton::clicked, this, &GenericDialog::browseForFile);
-    layout->addWidget(browseButton);
+    content->addWidget(browseButton);
   }
-
-  genericButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-  connect(genericButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-  connect(genericButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-  layout->addWidget(genericButtonBox);
 }
 
 QString GenericDialog::inputText(int index) const { return genericInputs.at(index)->text(); }
@@ -69,5 +92,64 @@ void GenericDialog::browseForFile() {
     genericInputs.last()->setText(path);
   }
 }
+
+namespace Widgets {
+
+QLineEdit *addTextField(GenericDialog &dialog, const QString &label, QLineEdit::EchoMode echoMode) {
+  auto *input = new QLineEdit;
+  input->setEchoMode(echoMode);
+  return dialog.addLabelledWidget(label, input);
+}
+
+QLineEdit *addGeneratedPasswordField(GenericDialog &dialog, const QString &label) {
+  dialog.addLabel(label);
+
+  auto *input = new QLineEdit;
+  input->setEchoMode(QLineEdit::Password);
+
+  auto *row       = new QHBoxLayout;
+  auto *genButton = new QPushButton("Generate");
+  row->addWidget(input);
+  row->addWidget(genButton);
+  dialog.addRow(row);
+
+  auto *strengthLabel = dialog.addWidget(new QLabel);
+
+  QObject::connect(genButton, &QPushButton::clicked, input,
+                   [input]() { input->setText(PasswordUtils::generatePassword({})); });
+  QObject::connect(input, &QLineEdit::textChanged, strengthLabel, [strengthLabel](const QString &text) {
+    strengthLabel->setText(PasswordUtils::strengthLabel(PasswordUtils::estimateStrength(text, {})));
+  });
+
+  return input;
+}
+
+QLineEdit *addFilePathField(GenericDialog &dialog, const QString &label, const QString &caption) {
+  dialog.addLabel(label);
+
+  auto *input = new QLineEdit;
+
+  auto *row          = new QHBoxLayout;
+  auto *browseButton = new QPushButton("Browse...");
+  row->addWidget(input);
+  row->addWidget(browseButton);
+  dialog.addRow(row);
+
+  QObject::connect(browseButton, &QPushButton::clicked, input, [input, &dialog, caption]() {
+    QString path = QFileDialog::getOpenFileName(&dialog, caption);
+    if (!path.isEmpty()) input->setText(path);
+  });
+
+  return input;
+}
+
+SecureString takeSecret(QLineEdit *field) {
+  if (!field) return {};
+  SecureString secret(field->text());
+  field->clear(); // Qt may keep its own copies of the plaintext; this only shortens their lifetime
+  return secret;
+}
+
+} // namespace Widgets
 
 } // namespace DialogUtils
