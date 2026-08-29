@@ -30,6 +30,7 @@ qt_add_executable(PasswordManager
     src/ui/DialogUtils.h
     src/core/FileUtils.h
     src/core/PasswordUtils.h
+    src/core/SecureString.h
 
     src/vault/PasswordEntry.cpp
     src/core/LoginGate.cpp
@@ -42,6 +43,7 @@ qt_add_executable(PasswordManager
     src/vault/PasswordManager.cpp
     src/core/FileUtils.cpp
     src/core/PasswordUtils.cpp
+    src/core/SecureString.cpp
     ${RESOURCES}
 )
 
