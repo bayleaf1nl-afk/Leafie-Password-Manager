@@ -69,32 +69,29 @@ constructor, where a typo is a local bug rather than a framework feature.
 
 1. **Any widget is accepted.** Nothing in the dialog special-cases `QLineEdit`;
    a widget the dialog has never heard of must work.
-2. **Every dialog in the app can be expressed through it**, including
-   confirmation/message windows, the password generator, the login and
-   first-run master password prompts, the new-entry form, and import/export
-   file pickers. If a window still needs to be hand-rolled, the abstraction is
-   not done.
-3. **Confirmation windows regain the behaviour `QMessageBox` gave for free.**
-   Since `confirmationWindow` is in scope, the design must account for standard
-   button sets and their roles, default and escape buttons, platform-native
-   button ordering, keyboard handling, and icon/spacing conventions — either by
-   providing them in the base or by a deliberate, documented decision to drop
-   them. Migrating it must not make confirmations feel worse than the current
-   `QMessageBox`.
-4. **The common cases stay short.** A yes/no confirmation and a labelled
+2. **Every dialog in the app can be expressed through it**, including the
+   password generator, the login and first-run master password prompts, the
+   new-entry form, and import/export file pickers. If one of these still needs
+   to be hand-rolled, the abstraction is not done. `confirmationWindow` is the
+   one deliberate maybe — see open questions.
+3. **The common cases stay short.** A yes/no confirmation and a labelled
    password prompt should each remain roughly a one-liner at the call site;
    small helpers may exist for these, built on the same substrate rather than
    beside it.
-5. **Type-safe, non-positional readback.** Callers retrieve values without
+4. **Type-safe, non-positional readback.** Callers retrieve values without
    relying on insertion order or on everything being a `QString`.
-6. **Ownership and lifetime are unambiguous.** If the caller creates the
-   widgets and keeps typed pointers, the dialog reparents for layout only and
-   must not become their sole owner; widgets must stay readable after `exec()`
-   returns. Whatever the rule is, it is written down.
-7. **Existing behaviour is preserved.** Password generation, strength feedback
+5. **The dialog is not the sole owner of the widgets.** This is the whole
+   point: each constructor that uses `GenericDialog` keeps its typed pointers
+   and goes on editing its widgets to its liking, before and after the dialog
+   lays them out. `GenericDialog` reparents for layout only; it must not take
+   over lifetime, and the widgets must stay valid and readable after `exec()`
+   returns. Note this is in tension with Qt's usual parent-owns-child rule, so
+   the mechanism (and who ultimately deletes what) needs to be spelled out
+   rather than assumed.
+6. **Existing behaviour is preserved.** Password generation, strength feedback
    and file browsing remain available as composable pieces owned by the dialogs
    that want them, not as constructor flags.
-8. **Secret handling does not regress.** Password input paths keep the
+7. **Secret handling does not regress.** Password input paths keep the
    memory-hygiene guarantees the vault code relies on; a generic widget API
    must not quietly turn secrets into extra long-lived `QString` copies.
 
@@ -112,8 +109,14 @@ constructor, where a typo is a local bug rather than a framework feature.
   keeps the base sealed; subclassing gives easier access to accept/reject.
 - How is validation expressed — per widget, or a dialog-level predicate gating
   the OK button?
-- Does the confirmation case get a `QMessageBox`-equivalent helper on top of
-  the base, or does the base itself learn standard button sets?
+- Is `confirmationWindow` worth migrating at all? It could stay exactly as it
+  is — a `QMessageBox` and nothing more — and that may be the right answer.
+  Routing it through the base means re-providing what `QMessageBox` gives for
+  free: standard button sets and their roles, default and escape buttons,
+  platform-native button ordering, keyboard handling, icon and spacing
+  conventions. Either the base learns those, or a helper on top supplies them,
+  or we accept the loss knowingly — but migrating it must not make
+  confirmations feel worse than they do today.
 - Should `inputText(int)` survive as a deprecated shim during migration, or
   should all call sites convert in one change?
 
