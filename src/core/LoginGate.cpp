@@ -21,6 +21,14 @@
 #include <sodium/crypto_pwhash.h>
 #include <sodium/randombytes.h>
 #include <sodium/utils.h>
+
+namespace {
+void wipe(QByteArray &buffer) {
+  if (!buffer.isEmpty()) sodium_memzero(buffer.data(), buffer.size());
+  buffer.clear();
+}
+} // namespace
+
 std::optional<PasswordManager> LoginGate::authenticate() {
   QFile   file(FileUtils::masterFilePath());
   bool    isFirstLaunch = !file.exists();
@@ -54,11 +62,12 @@ std::optional<PasswordManager> LoginGate::authenticate() {
     QByteArray password = dlg.inputText(0).toUtf8();
 
     if (!verifyMasterFile(password, data.loginSalt, data.loginHash)) {
+      wipe(password);
       continue;
     }
 
-    PasswordManager candidate(password);
-    if (!candidate.deriveKey(data.vaultSalt)) {
+    PasswordManager candidate;
+    if (!candidate.deriveKey(password, data.vaultSalt)) { // wipes password
       QMessageBox::critical(nullptr, "Login Failed", "Could not derive the vault encryption key.");
       return std::nullopt;
     }
@@ -66,8 +75,6 @@ std::optional<PasswordManager> LoginGate::authenticate() {
       QMessageBox::critical(nullptr, "Login failed", "Vault file is corrupted.");
       return std::nullopt;
     }
-    sodium_memzero(password.data(), password.size());
-    password.clear();
     return candidate;
   }
 
@@ -75,12 +82,11 @@ std::optional<PasswordManager> LoginGate::authenticate() {
   return std::nullopt;
 }
 
-bool LoginGate::verifyMasterFile(const QString &passwd, const unsigned char *storedSalt,
+bool LoginGate::verifyMasterFile(const QByteArray &passwd, const unsigned char *storedSalt,
                                  const unsigned char *storedHash) {
-  unsigned char     computedHash[LOGIN_HASH_BYTES];
-  const std::string stdPass = passwd.toStdString();
+  unsigned char computedHash[LOGIN_HASH_BYTES];
 
-  if (crypto_pwhash(computedHash, sizeof computedHash, stdPass.c_str(), stdPass.size(), storedSalt,
+  if (crypto_pwhash(computedHash, sizeof computedHash, passwd.constData(), passwd.size(), storedSalt,
                     crypto_pwhash_OPSLIMIT_INTERACTIVE, crypto_pwhash_MEMLIMIT_INTERACTIVE,
                     crypto_pwhash_ALG_DEFAULT) != 0) {
     return false; //! something fucked up here somehow
@@ -115,19 +121,19 @@ std::optional<PasswordManager> LoginGate::firstTimeInstallation(const QString &t
   DialogUtils::GenericDialog dialog(title, {{label, QLineEdit::Password}}, false, nullptr);
   if (dialog.exec() != QDialog::Accepted) return std::nullopt;
   Platform::attemptFloating(&dialog);
-  QString outMasterPassword = dialog.inputText(0);
+  QByteArray masterPassword = dialog.inputText(0).toUtf8();
 
   unsigned char computedHash[LOGIN_HASH_BYTES];
-  auto          stdPassword = outMasterPassword.toStdString();
-  const char   *cPassword   = stdPassword.c_str();
-  if (crypto_pwhash(computedHash, sizeof computedHash, cPassword, stdPassword.size(), loginSalt,
+  if (crypto_pwhash(computedHash, sizeof computedHash, masterPassword.constData(), masterPassword.size(), loginSalt,
                     crypto_pwhash_OPSLIMIT_INTERACTIVE, crypto_pwhash_MEMLIMIT_INTERACTIVE,
                     crypto_pwhash_ALG_DEFAULT) != 0) {
+    wipe(masterPassword);
     QMessageBox::critical(nullptr, "Error", "Could not hash the password properly!!");
     return std::nullopt;
   }
 
   if (!file.open(QIODevice::WriteOnly)) {
+    wipe(masterPassword);
     QMessageBox::critical(nullptr, "Error", "Could not write to master password file");
     return std::nullopt;
   }
@@ -136,11 +142,12 @@ std::optional<PasswordManager> LoginGate::firstTimeInstallation(const QString &t
   file.write(reinterpret_cast<const char *>(vaultSalt), sizeof vaultSalt);
 
   if (!file.commit()) {
+    wipe(masterPassword);
     QMessageBox::critical(nullptr, "Error", "Could not finalize master password file write");
     return std::nullopt;
   }
-  PasswordManager candidate(outMasterPassword);
-  if (!candidate.deriveKey(vaultSalt)) {
+  PasswordManager candidate;
+  if (!candidate.deriveKey(masterPassword, vaultSalt)) { // wipes masterPassword
     QMessageBox::critical(nullptr, "Error", "Could not derive the key to encrypt the vault!");
     return std::nullopt;
   }
