@@ -16,7 +16,8 @@ Codebase is organized into 5 directories that handle low-level OS interactions a
   | ui/   | self-explanatory   |
   | platform/   | clipboard & per-OS window handling   |
   | third_party/   | zxcvbn-cpp for password strength    |
-
+  | scripts/       | currently only for fix_qt_includes.py, which is to clean up the includes at the top of the file |
+ 
 ## III. Features
 
  1. Cryptographically secure password handling using `PasswordManager` & `libsodium`. (this took too long to learn) 
